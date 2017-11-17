@@ -1,0 +1,6 @@
+#remove latex useless files
+*.log
+*.toc
+*.aux
+*.synctex.gz
+*.toc
