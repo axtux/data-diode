@@ -14,7 +14,7 @@
 
 \title{Royal Military Academy\\
 	INFO-Y113 --- Management of Security: \\
-	CONOPS v2.0 \& Risk Analysis}
+	Concept Of Operations v2}
 
 \author{DANHIER Piere, LECOCQ Alexis, NYAKI Loïc}
 
@@ -28,7 +28,10 @@
 \section{Introduction}
 In recent years, cyber-security has become a primary concern for companies all over the world. No matter the size of the company, data often represent the heart of their business and whether the concern is the secrecy of intellectual property, or users' privacy, the theft of private data bears a huge cost for companies. Be it a monetary cost (lawsuits, fines) or a reputation cost (loss of trust, public outrage). In the case of government agencies, states secrets and other classified information could be stolen by a foreign nation, possibly leading to the loss of lives in conflict zones, loss of political leverage on the international scene, domestic political turmoil and scandals or simply public embarrassment.\\
 
-When trying to protect these sensitive data, a common measure could be to physically isolate the network from the internet. Acting this way ensures that the data from the network is inaccessible from the outside world. This method is called "air gap". The main issue with this system is that inevitably, some external data or files will be needed,in which case a manual import (via USB drive, by connecting and external laptop into the secure network, or by using some other data transfer device) will be necessary, but will compromise the security of the secure network: the data that is manually transferred to the secure network may have been infected by a malware, and sensitive data could be copied onto the device, which will cause a data leak.\\
+When trying to protect these sensitive data, a common measure is be to physically isolate the network from the internet, by creating an \textit{air gap}. Acting this way ensures that the data from the network is inaccessible from the outside world. The main issue with this method is that inevitably, some external data or files will at some point need to be imported into the secure network, be it for software update, or simply because some files from the outside are necessary for the people working in the secure network. In that case, a manual import (via USB drive, by connecting and external laptop into the secure network, or by using some other data transfer device) will be necessary.\\
+
+The problem with that method is that it can compromise the security of the secure network. For instance, the data that is manually transferred into the network may have been infected by a malware, or the secure network might already be infected by a virus. In both cases, there is a possibility for some malicious code to exfiltrate data, or to spread a virus outside, by secretly writing on the device that was originally used to import the data into the network.\\
+
 
 To prevent all leaks of data, we propose a solution that ensures that the secure network will be protected from any data leaks by having it's incoming data pass through a data-diode, which is a system that can insure that data can only flow from the outside of the network into the network. This system is called "data-diode".
 
