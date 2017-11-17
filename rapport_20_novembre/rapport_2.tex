@@ -40,6 +40,11 @@ Donc en gros, notre solution semblait arbitraire, car elle n'était pas basées 
 \section{Data Diode}
 A data diode is a one-way data transfer system. It is composed of two server: one server communicates with the outside network and the other one communicate with the secure network. Moreover, these two servers are connected to one another through a single unidirectional fiber optics cable. The cable going in the other direction has been physically cut. As a consequence, data can only flow in one direction, which guarantees the "one-way" property.
 
+\begin{figure}
+	\includegraphics[scale=0.7]{img/network.png}
+	\caption{High level architecture of a data diode.}
+\end{figure}
+
 \subsection{Applications}
 With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode management service. 
 Other applications such as email management and web browsing will be considered for future versions of the data-diode.
