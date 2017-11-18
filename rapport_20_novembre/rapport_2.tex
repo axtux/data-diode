@@ -100,12 +100,15 @@ The one-way communication channel between the two sides of the data-diode forbid
 
 
 \section{Users}
+We identify three types of users : the administrators, the simple users and the FTP users.
 \subsection{Simple Users}
+Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files that were pushed into the data diode.
 
 \subsection{Administrators}
+Administrators can monitor the system, create accounts for simple users as well as for FTP users.
 
-\subsection{Data Providers}
-Data providers are users from outside the secure network, that are allowed to push files into the secure network. To identify data providers, a public key infrastructure will be used.
+\subsection{FTP Users}
+FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data diode, created by an administrator. This account allows him to push data through the data diode, via an FTP connection.
 
 \section{Administration and Management}
 \subsection{Simple Users}
