@@ -32,15 +32,34 @@ When trying to protect these sensitive data, a common measure is be to physicall
 
 The problem with that method is that it can compromise the security of the secure network. For instance, the data that is manually transferred into the network may have been infected by a malware, or the secure network might already be infected by a virus. In both cases, there is a possibility for some malicious code to exfiltrate data, or to spread a virus outside, by secretly writing on the device that was originally used to import the data into the network.\\
 
+As a consequence, we need to build a solution that prevents data leaks while allowing the transfer of files from the outside network into the secure network.
 
-To prevent all leaks of data, we propose a solution that ensures that the secure network will be protected from any data leaks by having it's incoming data pass through a data-diode, which is a system that can insure that data can only flow from the outside of the network into the network. This system is called "data-diode".
+\section{Goals of this project}
+We need to design a system that accomplishes two main goals :
 
+\begin{enumerate}
+\item{Isolate the content of a secure network from the outside world, while allowing data to be transferred from the outside world to that secure network.}
+\item{Allow users of the system to be able to consult an administration web page, from the inside the secure network, in order to perform system management operations}
+\end{enumerate}
+
+For this project, the general solution is imposed and should be a data diode, which we will describe in section~\ref{sec:data-diode}.
+
+
+\section{Objectives}
+We identify the following objectives:
+\begin{itemize}
+\item{Build a file transfer functionality between the outside network and the secure network.}
+\item{Ensure the integrity of the data during the file transfer, which means that the data that arrives in the secure network should be the same as the data that was sent from the outside.}
+\item{Ensure data confidentiality: no data should be able to leave the the secure network. Keep in mind that the scope of our confidentiality concern is the secure network in relation to the outside world. Ensuring confidentiality between the users of the secure network itself is out of the scope of this project.}
+\item{Ensure availability: The file transfer service and administration service should always be available to users. More precisely, an authorized person should always be able to transfer a file into the secure network, and an authorized user should always be able to access and operate the administration page.}
+\end{itemize}
 \section{Security requirements}
 TODO : dans cette section, on va bien spécifier quelles sont les exigences demandées au niveau de la sécurité. C'était une des remarque qu'on avait fait à mon groupe l'an passé : on avait proposé une solution, mais on ne s'était pas basés sur des requirements pour faire notre choix quand à la solution. Donc ils nous avaient demandé : ok, vous utilisez cette technologie là, mais pourquoi? On répondait "ah ben ça va nous permettre ceci et celà". Et il nous disaient "mais c'est mis nulle part dans votre rapport que "ceci et cela" est une exigence.\\
 
 Donc en gros, notre solution semblait arbitraire, car elle n'était pas basées sur une réponse à des exigences. Ce qu'ils voulaient, c'était qu'on identifie toutes les exigences au niveau de la sécurité, et qu'ensuite, on dise "voilà, selon les exigences X et Y qu'il nous faut respecter, nous décidons d'utiliser la solution B plutot que la solution A, car c'est la seule qui respecte toutes les exigences."
 
 \section{Data Diode}
+\label{sec:data-diode}
 A data diode is a one-way data transfer system. It is composed of two server: one server communicates with the outside network and the other one communicate with the secure network. Moreover, these two servers are connected to one another through a single unidirectional fiber optics cable. The cable going in the other direction has been physically cut. As a consequence, data can only flow in one direction, which guarantees the "one-way" property.
 
 \begin{figure}
