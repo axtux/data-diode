@@ -35,24 +35,27 @@ The problem with that method is that it can compromise the security of the secur
 As a consequence, we need to build a solution that prevents data leaks while allowing the transfer of files from the outside network into the secure network.
 
 \section{Goals of this project}
-We need to design a system that accomplishes two main goals :
+Goals define the general direction of what the organization aims to accomplish, in the long term. Here, we wish to design a system that accomplishes two main goals :
 
 \begin{enumerate}
-\item{Isolate the content of a secure network from the outside world, while allowing data to be transferred from the outside world to that secure network.}
-\item{Allow users of the system to consult an administration web page, from inside the secure network, in order to perform system management operations}
+\item{Create a device that completely prevents the exfiltration of data from a secure network, while allowing data to be transferred from the outside world into that secure network, at all times.}
+\item{Allow specific users to manage and operate this system through an administration web page, accessible from within the secure network.}
 \end{enumerate}
 
 For this project, the general solution is imposed and should be a data diode, which we will describe in section~\ref{sec:data-diode}.
 
 
 \section{Objectives}
+Objectives can be considered as the building parts goals. They are concrete and can be achieved by following a certain number of steps. Achieving all the objectives should translate to achieving all the goals.\\
+
 We identify the following objectives:
 \begin{itemize}
 \item{Build a file transfer functionality between the outside network and the secure network.}
 \item{Ensure the integrity of the data during the file transfer, which means that the data that arrives in the secure network should be the same as the data that was sent from the outside.}
-\item{Ensure data confidentiality: no data should be able to leave the the secure network. Keep in mind that the scope of our confidentiality concern is the secure network in relation to the outside world. Ensuring confidentiality between the users of the secure network itself is out of the scope of this project.}
+\item{Ensure data confidentiality: no data should be able to leave the the secure network. Keep in mind that the scope of this confidentiality concern is the secure network in relation to the outside world. Ensuring confidentiality between individual users within the secure network itself is out of the scope of this project.}
 \item{Ensure availability: The file transfer service and administration service should always be available to users. More precisely, an authorized person should always be able to transfer a file into the secure network, and an authorized user should always be able to access and operate the administration page.}
 \end{itemize}
+
 \section{Security requirements}
 TODO : dans cette section, on va bien spécifier quelles sont les exigences demandées au niveau de la sécurité. C'était une des remarque qu'on avait fait à mon groupe l'an passé : on avait proposé une solution, mais on ne s'était pas basés sur des requirements pour faire notre choix quand à la solution. Donc ils nous avaient demandé : ok, vous utilisez cette technologie là, mais pourquoi? On répondait "ah ben ça va nous permettre ceci et celà". Et il nous disaient "mais c'est mis nulle part dans votre rapport que "ceci et cela" est une exigence.\\
 
