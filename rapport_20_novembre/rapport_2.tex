@@ -56,10 +56,37 @@ We identify the following objectives:
 \item{Ensure availability: The file transfer service and administration service should always be available to users. More precisely, an authorized person should always be able to transfer a file into the secure network, and an authorized user should always be able to access and operate the administration page.}
 \end{itemize}
 
+\section{Scope}
+It is important to precisely identify the scope of this project, in relation to our goals and objectives.\\
+
+Our solution is destined to be integrated in an existing system. As such, when considering the security of the system as a whole, we must identify which security aspects fall under our responsibility and which don't. 
+
+\subsection{In scope}
+The following elements are in scope, which means that it is our responsibility to make sure that the security of these elements is ensured.
+
+\begin{itemize}
+\item{The availability of the file transfer service}
+\item{The confidentiality of user data and credentials when interacting with the data diode}
+\item{The confidentiality of the data within the secure network. There should be no data leak.}
+\end{itemize}
+
+\subsection{Out of scope}
+The following elements are out of scope. This means that the security of these elements does not fall under our responsibility, but rather under the responsibility of the client, or another third party.
+
+\begin{itemize}
+\item{The physical access to the hardware, such as the power button or Ethernet cables}
+\item{The physical integrity of the hardware}
+\item{The electrical power source}
+\item{The security within the secure network, such as the presence of malwares or other viruses}
+\end{itemize}
+
 \section{Security requirements}
 TODO : dans cette section, on va bien spécifier quelles sont les exigences demandées au niveau de la sécurité. C'était une des remarque qu'on avait fait à mon groupe l'an passé : on avait proposé une solution, mais on ne s'était pas basés sur des requirements pour faire notre choix quand à la solution. Donc ils nous avaient demandé : ok, vous utilisez cette technologie là, mais pourquoi? On répondait "ah ben ça va nous permettre ceci et celà". Et il nous disaient "mais c'est mis nulle part dans votre rapport que "ceci et cela" est une exigence.\\
 
 Donc en gros, notre solution semblait arbitraire, car elle n'était pas basées sur une réponse à des exigences. Ce qu'ils voulaient, c'était qu'on identifie toutes les exigences au niveau de la sécurité, et qu'ensuite, on dise "voilà, selon les exigences X et Y qu'il nous faut respecter, nous décidons d'utiliser la solution B plutot que la solution A, car c'est la seule qui respecte toutes les exigences."
+
+
+
 
 \section{Data Diode}
 \label{sec:data-diode}
