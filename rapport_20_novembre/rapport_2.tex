@@ -140,13 +140,13 @@ The management of the FTP accounts is handled by administrators through the data
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts for the people who will provide data to the data diode as well as allow the start and stop of the data diode if needed.
+One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts as well start, stop or restart the data diode.
 
 \subsection{Physical Architecture}
-TODO: virtual machines or containers, instanciating the 2 sides of the data diode (sender and receiver) :
+The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. Each server has the following components :
 \begin{itemize}
-\item{2 physical servers, having each 2 ethernet network interface, and therefore 2 IP addresses}
-
+\item{Two network interfaces: one for connecting to a network, and one for connecting to the other server}
+\item{A fiber optic adapter, to translate the signal coming from the fiber optic cable from light into a signal that can be transmitted through an Ethernet port.}
 \end{itemize}
 
 \subsection{Software architecture}
