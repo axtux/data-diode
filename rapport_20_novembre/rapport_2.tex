@@ -34,12 +34,13 @@ The problem with that method is that it can compromise the security of the secur
 
 As a consequence, we need to build a solution that prevents data leaks while allowing the transfer of files from the outside network into the secure network.
 
-\section{Goals of this project}
+\section{Goals of the project}
 \label{sec:goals}
 Goals define the general direction of what the organization aims to accomplish, in the long term. Here, we wish to design a system that accomplishes two main goals :
 
 \begin{enumerate}
-\item{Create a device that completely prevents the exfiltration of data from a secure network, while allowing data to be transferred from the outside world into that secure network, at all times.}
+\item{Create a device that completely prevents the exfiltration of data from a secure network, while allowing data to be transferred from the outside world into that secure network.}
+\item{Ensure the availability of the system. The services should always be up, with no downtime}
 \item{Allow specific users to manage and operate this system through an administration web page, accessible from within the secure network.}
 \end{enumerate}
 
@@ -50,13 +51,40 @@ For this project, the general solution is imposed and should be a data diode, wh
 \label{sec:objectives}
 Objectives can be considered as the building parts goals. They are concrete and can be achieved by following a certain number of steps. Achieving all the objectives should translate to achieving all the goals.\\
 
+
 We identify the following objectives:
 \begin{itemize}
-\item{Build a file transfer functionality between the outside network and the secure network.}
-\item{Ensure the integrity of the data during the file transfer, which means that the data that arrives in the secure network should be the same as the data that was sent from the outside.}
-\item{Ensure data confidentiality: no data should be able to leave the the secure network. Keep in mind that the scope of this confidentiality concern is the secure network in relation to the outside world. Ensuring confidentiality between individual users within the secure network itself is out of the scope of this project.}
-\item{Ensure availability: The file transfer service and administration service should always be available to users. More precisely, an authorized person should always be able to transfer a file into the secure network, and an authorized user should always be able to access and operate the administration page.}
+\item{Build a web interface for administrating the data diode}
+\item{Use the File Transfer Protocol to implement a file transfer functionality between the outside network and the secure network.}
 \end{itemize}
+
+\subsection{Data Confidentiality}
+There should be no way for data to leak outside of the secure network. Preventing physical access to a computer in the secure network is out of the scope of this project (see section \ref{sec:outscope}).\\
+
+The objectives for ensuring data confidentiality are as follows:
+
+\begin{itemize}
+\item{Physically prevent data from exiting the secure network}
+\item{When establishing communication with our system, user credentials and information shouldn't be exposed to other users.}
+\end{itemize}
+
+\subsection{Data Integrity}
+The data retrieved from the outside of the network should be the same as the data that was initially sent. No data corruption or modification should take place.
+
+\subsection{System Availability}
+The system should be always up, unless it is turned off on purpose by a legitimate user or administrator.
+
+The objectives for ensuring system availability are as follows:
+
+\begin{itemize}
+\item{The system must keep working no matter how many files are pushed to the system}
+\item{An authorized user should always be able to transfer a file into the secure network}
+\item{An authorized user should always be able to access and operate the administration page}
+\item{In case of system crash, the system must restarted immediately}
+\item{The web interface should always be accessible and working as intended. Therefore, measures should be taken against Cross site scripting (XSS) and Cross Site Request Forgery attacks (CSRF).}
+
+\end{itemize}
+
 
 \section{Scope}
 It is important to precisely identify the scope of this project, in relation to our goals and objectives.\\
@@ -73,6 +101,7 @@ The following elements are in scope, which means that it is our responsibility t
 \end{itemize}
 
 \subsection{Out of scope}
+\label{sec:outscope}
 The following elements are out of scope. This means that the security of these elements does not fall under our responsibility, but rather under the responsibility of the client, or another third party.
 
 \begin{itemize}
@@ -97,19 +126,21 @@ A fiber optic connection normally uses two cables: one for each direction. In th
 \end{figure}
 
 \subsection{Simulating a data diode}
-At first, instead of using a real data diode, we are going to build the prototype of a data diode by simulating the actual system through software and the unidirectional flow of the data by modifying the IP table in a way that will allow traffic in one direction, and drop all packets going in the other direction.
+At first, instead of using a real data diode, we are going to build the prototype of a data diode by simulating the actual system through software. The unidirectional nature of the data transfer will be simulated by modifying the IP table in a way that will allow traffic in one direction, and drop all traffic going in the other direction.
 
 \subsection{Applications}
-With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service. 
+With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service, as specified in our goals and objectives (section \ref{sec:goals} and section \ref{sec:objectives}).\\
+
 Other applications such as email management and web browsing will be considered for future versions of the data-diode.
 
-\subsubsection{File Transfer}
-The main application is a file transfer service that will enable files to be pushed from the outside network into the inside network, through the use of the File Transfer Protocol (FTP).\\
+\subsubsection{File Transfer (FTP)}
+The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP).\\
 
-The management of the FTP accounts is handled by administrators.
+The management of the FTP accounts is handled by administrators through the data diode administration page, as described in section \ref{sec:administration}.
 
 \subsubsection{Administration and User Management}
-One of the requirements of this project is the use of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts for the people who will provide data to the data diode as well as allow the start and stop of the data diode.
+\label{sec:administration}
+One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts for the people who will provide data to the data diode as well as allow the start and stop of the data diode if needed.
 
 \subsection{Physical Architecture}
 TODO: virtual machines or containers, instanciating the 2 sides of the data diode (sender and receiver) :
@@ -143,9 +174,11 @@ Administrators can monitor the system, create accounts for simple users as well 
 FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data diode, created by an administrator. This account allows him to push data through the data diode, via an FTP connection.
 
 \section{Administration and Management}
-\subsection{Simple Users}
+\subsection{Users Administration}
+\subsubsection{Simple Users}
 
-\subsection{Administrators}
+\subsubsection{Administrators}
+
 TODO:
 Administrators can :
 \begin{itemize}
@@ -154,4 +187,8 @@ Administrators can :
 \item{Manage users : creation, deletion, user privileges modification}
 \item{Manage Data providers : creation and deletion of profile.}
 \end{itemize}
+
+\subsection{Data Diode Administration}
+
+
 \end{document}
