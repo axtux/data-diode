@@ -28,7 +28,7 @@
 \section{Introduction}
 In recent years, cyber-security has become a primary concern for companies all over the world. No matter the size of the company, data often represent the heart of their business and whether the concern is the secrecy of intellectual property, or users' privacy, the theft of private data bears a huge cost for companies. Be it a monetary cost (lawsuits, fines) or a reputation cost (loss of trust, public outrage). In the case of government agencies, states secrets and other classified information could be stolen by a foreign nation, possibly leading to the loss of lives in conflict zones, loss of political leverage on the international scene, domestic political turmoil and scandals or simply public embarrassment.\\
 
-When trying to protect these sensitive data, a common measure is be to physically isolate the network from the internet, by creating an \textit{air gap}. Acting this way ensures that the data from the network is inaccessible from the outside world. The main issue with this method is that inevitably, some external data or files will at some point need to be imported into the secure network, be it for software update, or simply because some files from the outside are necessary for the people working in the secure network. In that case, a manual import (via USB drive, by connecting and external laptop into the secure network, or by using some other data transfer device) will be necessary.\\
+When trying to protect these sensitive data, a common measure is be to physically isolate the network from the internet, by creating an \textit{air gap}. Acting this way ensures that the data from the network is inaccessible from the outside world. The main issue with this method is that inevitably, some external data or files will at some point need to be imported into the secure network, be it for software update, or simply because some files from the outside are necessary for the people working in the secure network. In that case, a manual import (via USB drive, by connecting an external laptop into the secure network, or by using some other data transfer device) will be necessary.\\
 
 The problem with that method is that it can compromise the security of the secure network. For instance, the data that is manually transferred into the network may have been infected by a malware, or the secure network might already be infected by a virus. In both cases, there is a possibility for some malicious code to exfiltrate data, or to spread a virus outside, by secretly writing on the device that was originally used to import the data into the network.\\
 
@@ -193,19 +193,13 @@ FTP users operate from outside the secure network and are allowed to push files 
 \section{Administration and Management}
 \subsection{Users Administration}
 \subsubsection{Simple Users}
-
+If a user forgets his password, he has to contact the system administrator to obtain a new one.
 \subsubsection{Administrators}
-
-TODO xx	:
-Administrators can :
-\begin{itemize}
-\item{Shut down the data diode, through the administration page}
-\item{Start the data-diode}
-\item{Manage users : creation, deletion, user privileges modification}
-\item{Manage Data providers : creation and deletion of profile.}
-\end{itemize}
-
-\subsection{Data Diode Administration}
+An administrator is able to turn on or off the data diode through the web administration page within the secure network. He also is the users and providers manager. He can create or delete a user or provider account and modify the priviliges of the accounts. 
+\subsection{Data Diode Installation, Configuration and Administration}
+\subsubsection{Installation}
+\subsubsection{Configuration}
+\subsubsection{Administration}
 
 
 \end{document}
