@@ -137,13 +137,21 @@ With this data diode, we decided to keep things simple and to focus on proposing
 Other applications such as email management and web browsing will be considered for future versions of the data-diode.
 
 \subsubsection{File Transfer (FTP)}
-The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP).\\
+The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
 
 The management of the FTP accounts is handled by administrators through the data diode administration page, as described in section \ref{sec:administration}.
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts as well start, stop or restart the data diode.
+One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators:
+
+\begin{itemize}
+\item{Monitor file transfers: the administrator should be able to see what files have been transferred, or see if there has been issues regarding the transfer of a file}
+\item{Create or delete FTP accounts}
+\item{Start, stop or restart the data-diode}
+\item{Purge \textit{download directory}}
+\item{Set or modify the maximum size of the \textit{download directory}}
+\end{itemize} 
 
 \subsection{Physical Architecture}
 The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the the server facing the secure network is called \textit{the receiver}.\\
@@ -181,24 +189,37 @@ At first, instead of using a real data diode, we are going to build the prototyp
 
 \section{Users}
 We identify three types of users : the administrators, the simple users and the FTP users.
+
 \subsection{Simple Users}
-Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files that were pushed into the data diode.
+Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files from the \textit{download directory}, by accessing the web interface. They do no posses other privileges than that.
 
 \subsection{Administrators}
-Administrators can monitor the system, create accounts for simple users as well as for FTP users.
+The role of the administrators is to manage the system so that it runs smoothly. They have access to all the functionalities of the administration interface as described in section \ref{sec:administration}.
 
 \subsection{FTP Users}
 FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data diode, created by an administrator. This account allows him to push data through the data diode, via an FTP connection.
 
 \section{Administration and Management}
 \subsection{Users Administration}
-\subsubsection{Simple Users}
-If a user forgets his password, he has to contact the system administrator to obtain a new one.
-\subsubsection{Administrators}
-An administrator is able to turn on or off the data diode through the web administration page within the secure network. He also is the users and providers manager. He can create or delete a user or provider account and modify the priviliges of the accounts. 
+The administration interface allows administrators to manage the user that can access the data diode. The users from outside of the data diode are responsible for pushing files into the \textit{download directory}. The user from the inside of the secure network will then access the web interface to retrieve the files they want on their computer.
+
+\subsubsection{Administration of Simple Users}
+We decide that every user inside the secure network should be able to access the files that have been imported into the \textit{download directory}. Therefore, there will be no specific management of these users.
+
+\subsubsection{Administrators of other Administrators}
+Administrators are able to create an administrator account, or to suspend the account of another administrator.
+
+TODO : Cette section décrit l'administration des utilisateurs de type "administrateur". Donc je pense que le texte ci-dessous n'est pas dans la bonne catégorie. Le texte décrit plutot les pouvoir de l'administrateur et devrait donc se situer dans une des sections plus haut ==>\\
+An administrator is able to turn on or off the data diode through the web administration page within the secure network. He also is the users and providers manager. He can create or delete a user or provider account and modify the privileges of the accounts. 
+
 \subsection{Data Diode Installation, Configuration and Administration}
+
 \subsubsection{Installation}
+The data diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
+
 \subsubsection{Configuration}
+The data diode settings will be specified in a configuration file that can be modified manually. The settings include the HTTP port that must be used, and the maximum size of the \textit{download directory}.
+
 \subsubsection{Administration}
 \section{Risk analysis}
 \subsection{Hardware}
@@ -249,5 +270,10 @@ detect brute force, prevent SQL injections, log the account modif
  
 
 
+\section{Risk Analysis}
+\subsection{Assets Identification}
+\subsection{Threats Identification}
+\subsection{Vulnerabilities}
+\subsection{Risks}
 
 \end{document}
