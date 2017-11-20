@@ -200,6 +200,54 @@ An administrator is able to turn on or off the data diode through the web admini
 \subsubsection{Installation}
 \subsubsection{Configuration}
 \subsubsection{Administration}
+\section{Risk analysis}
+\subsection{Hardware}
+\subsubsection{Source}
+Someone malicious manage to get physical access to the data-diode. The hacker can then branch a device to the data diode to read or send packets to the data diode.
+\subsubsection{Threats}
+The hacker can
+\begin{itemize}
+\item shut down the system or make a direct DDOS attack causing the loss of availability of the system.
+\item read or modify the files send to the data diode. The integrity and confidentiality are then corrupted
+\item block files before reaching the data diode.
+\end{itemize}
+\subsubsection{Countermeasures}
+The physical access to the system is out of our scope. The risk is then tranfered to the client. However, the risk for the integrity and confidentiality of the system is mitigated by the use of cryptography.
+\subsection{Secure network}
+\subsubsection{Source}
+An unauthorized person connects into the secure network.
+\subsubsection{Threats}
+This person can then use packet sniffing techniques to read credentials and then try to connect to the data diode with a user or administrator account.
+\subsubsection{Countermeasures}
+As well as the physical access to the data diode, the integrity of the secure network is out of our scope but the use if cryptography mitigate the risk.
+\subsection{External network}
+\subsubsection{Source}
+An opponent take knowledge of the IP adress of the data diode.
+\subsubsection{Threats}
+He can then launch a DDOS attack against the system by floating the identification process with fake connection demands. The availability of the systemc can then be endangered.
+\subsubsection{Countermeasures}
+When the system detects that a certain IP adress unsuccessfully tries to connect itself to the data diode a certain amount of times, we can temporarily ban this IP adress from the access to our system.  The risk is then mitigated.
+\subsubsection{Residual risk}
+If the opponent has access to a botnet with enough different IP adresses, he still can DDOS attack our sytem with success. The availability of our sytem could then be suspended.
+\subsection{Administration webpage}
+\subsubsection{Source}
+Someone inside the secure network who has not the administrator status wants to obtain this right.
+\subsubsection{Threats}
+\begin{itemize}
+\item SQL injection
+\item Brute force
+\item If access granted he can modify accounts and turn off the diode
+\end{itemize}
+\subsubsection{Countermeasures}
+detect brute force, prevent SQL injections, log the account modif
+\subsection{Users}
+\subsection{FTP servers}
+
+
+
+
+ 
+
 
 
 \end{document}
