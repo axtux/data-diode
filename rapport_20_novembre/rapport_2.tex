@@ -49,14 +49,16 @@ In this project, the general solution is imposed and should be a data diode, whi
 
 \section{Objectives}
 \label{sec:objectives}
-Objectives can be considered as the building parts goals. They are concrete and can be achieved by following a certain number of steps. Achieving all the objectives should translate to achieving all the goals.\\
+Objectives can be considered as the building parts goals. They are concrete and can be achieved by following a certain number of steps. Achieving all the objectives should translate into achieving all the goals.\\
 
 
-We identify the following objectives:
+We identify the following general objectives:
 \begin{itemize}
 \item{Build a web interface for administrating the data diode}
 \item{Use the File Transfer Protocol to implement a file transfer functionality between the outside network and the secure network.}
 \end{itemize}
+
+The next sections identify more specific objectives.
 
 \subsection{Data Confidentiality}
 There should be no way for data to leak outside of the secure network. Preventing physical access to a computer in the secure network is out of the scope of this project (see section \ref{sec:outscope}).\\
@@ -65,19 +67,19 @@ The objectives for ensuring data confidentiality are as follows:
 
 \begin{itemize}
 \item{Physically prevent data from exiting the secure network}
-\item{When establishing communication with our system, user credentials and information shouldn't be exposed to other users.}
+\item{When establishing communication with the system, user credentials and information shouldn't be exposed to other users.}
 \end{itemize}
 
 \subsection{Data Integrity}
 The data retrieved from the outside of the network should be the same as the data that was initially sent. No data corruption or modification should take place.
 
 \subsection{System Availability}
-The system should be always up, unless it is turned off on purpose by a legitimate user or administrator.
+The system should always be up, unless it is turned off on purpose by a legitimate user or administrator.
 
 The objectives for ensuring system availability are as follows:
 
 \begin{itemize}
-\item{The system must keep working no matter how many files are pushed to the system}
+\item{The system must keep working no matter how many files are pushed onto the system}
 \item{An authorized user should always be able to transfer a file into the secure network}
 \item{An authorized user should always be able to access and operate the administration page}
 \item{In case of system crash, the system must restarted immediately}
