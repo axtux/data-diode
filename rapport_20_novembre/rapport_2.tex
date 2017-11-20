@@ -137,13 +137,21 @@ With this data diode, we decided to keep things simple and to focus on proposing
 Other applications such as email management and web browsing will be considered for future versions of the data-diode.
 
 \subsubsection{File Transfer (FTP)}
-The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP).\\
+The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
 
 The management of the FTP accounts is handled by administrators through the data diode administration page, as described in section \ref{sec:administration}.
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts as well start, stop or restart the data diode.
+One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators:
+
+\begin{itemize}
+\item{Monitor file transfers: the administrator should be able to see what files have been transferred, or see if there has been issues regarding the transfer of a file}
+\item{Create or delete FTP accounts}
+\item{Start, stop or restart the data-diode}
+\item{Purge \textit{download directory}}
+\item{Set or modify the maximum size of the \textit{download directory}}
+\end{itemize} 
 
 \subsection{Physical Architecture}
 The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the the server facing the secure network is called \textit{the receiver}.\\
@@ -181,8 +189,9 @@ At first, instead of using a real data diode, we are going to build the prototyp
 
 \section{Users}
 We identify three types of users : the administrators, the simple users and the FTP users.
+
 \subsection{Simple Users}
-Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files that were pushed into the data diode.
+Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files that were pushed into the data diode. They do no posses other privileges than that.
 
 \subsection{Administrators}
 Administrators can monitor the system, create accounts for simple users as well as for FTP users.
