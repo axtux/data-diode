@@ -255,25 +255,14 @@ If the opponent has access to a botnet with enough different IP adresses, he sti
 Someone inside the secure network who has not the administrator status wants to obtain this right.
 \subsubsection{Threats}
 \begin{itemize}
-\item SQL injection
-\item Brute force
-\item If access granted he can modify accounts and turn off the diode
+This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data diode or modify users privileges and accounts.
 \end{itemize}
 \subsubsection{Countermeasures}
-detect brute force, prevent SQL injections, log the account modif
+We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. When a certain amount of failed connections by the IP adress, the system bans this adress.
 \subsection{Users}
 \subsection{FTP servers}
 
 
 
-
- 
-
-
-\section{Risk Analysis}
-\subsection{Assets Identification}
-\subsection{Threats Identification}
-\subsection{Vulnerabilities}
-\subsection{Risks}
 
 \end{document}
