@@ -118,15 +118,18 @@ Based on the goals and objectives specified respectively in section \ref{sec:goa
 
 Just like a diode only conduct current in one direction, a data diode is a networking device that only allows data to flow in one direction. It is composed of two physical servers: one server communicates with the outside network and the other one communicate with the secure network. The two servers are connected together by a single unidirectional fiber optics cable.\\
 
-A fiber optic connection normally uses two cables: one for each direction. In the case of 	 data diode, only one cable is used, allowing the data to flow in one direction. The cable going in the other direction is physically cut. As a consequence, data going through a data diode can only flow in one direction, which is required by the goals defined in section \ref{sec:goals}.
+A fiber optic connection normally uses two cables: one for each direction. In the case of 	 data diode, only one cable is used, allowing the data to flow in one direction. The cable going in the other direction is physically cut. As a consequence, data going through a data diode can only flow in one direction, which is required by the goals defined in section \ref{sec:goals}.\\
+
+The one-way communication channel between the two sides of the data-diode forbids the use of usual TCP based protocols (such as HTTP or FTP), as TCP requires bi-directional communication between two parties. As data between the two sides of the data-diode can only flow in one direction, we need data to be send over a protocol that doesn't require bi-directional communication. This can be done by using UDP for the communication between our two servers.\\
+
+However UDP comes with its own limitations, as it doesn't ensure the order at which the paquets arrive, nor does it manage packets loss. These issues will therefore need to be taken into account at the software level.
+
 
 \begin{figure}
 	\includegraphics[scale=0.7]{img/network.png}
 	\caption{High level architecture of a data diode.}
 \end{figure}
 
-\subsection{Simulating a data diode}
-At first, instead of using a real data diode, we are going to build the prototype of a data diode by simulating the actual system through software. The unidirectional nature of the data transfer will be simulated by modifying the IP table in a way that will allow traffic in one direction, and drop all traffic going in the other direction.
 
 \subsection{Applications}
 With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service, as specified in our goals and objectives (section \ref{sec:goals} and section \ref{sec:objectives}).\\
@@ -143,23 +146,37 @@ The management of the FTP accounts is handled by administrators through the data
 One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators to monitor file transfers, create or delete FTP accounts as well start, stop or restart the data diode.
 
 \subsection{Physical Architecture}
-The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. Each server has the following components :
+The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the the server facing the secure network is called \textit{the receiver}.\\
+
+Each server contains the following components :
 \begin{itemize}
 \item{Two network interfaces: one for connecting to a network, and one for connecting to the other server}
 \item{A fiber optic adapter, to translate the signal coming from the fiber optic cable from light into a signal that can be transmitted through an Ethernet port.}
 \end{itemize}
 
 \subsection{Software architecture}
-TODO
-\begin{itemize}
-\item{1 FTP servers (sender). The sender must be able to receive PUT requests from the outside.}
-\item{An UDP client (on the \textit{sender} side) that will send files over UDP}
-\item{An UDP server (on the \textit{receiver }side)} that will receive the files pushed over TCP
-\end{itemize}
-\subsubsection{Technical Aspects}
-A data diode is composed of two servers linked by a one-way communication channel. The server, that we'll call the \textit{sender}, receives data from the external network with the TCP protocol. The second server, called the \textit{receiver}, uses the TCP protocol to send data to the secure network too. The same conclusion can then be applied to those data.\\
+The data diode is composed of two servers, \textit{the sender} and \textit{the receiver}, which have different roles. 
 
-The one-way communication channel between the two sides of the data-diode forbids the use of a TCP based protocol (such as HTTP or FTP), as TCP requires bi-directional communication between two parties. As data between the two sides of the data-diode can only flow in one direction, we need data to be send over a protocol that doesn't require bi-directional communication. This can be done by using UDP for the communication between our two servers. The problem with UDP is that the sender cannot be sure that the receiver received the data or if the data is not corrupted. To mitigate this risk, we chose to send three times the packets of data.
+\subsubsection{The Sender}
+The \textit{sender} must be able to receive FTP PUT requests from the outside network and to transmit data to the \textit{receiver} via UDP.\\
+
+The sender must therefore be comprised of :
+\begin{itemize}
+\item{A FTP server}
+\item{A UDP client}
+\end{itemize} 
+
+\subsubsection{The Receiver}
+The \textit{receiver} must be able to receive UDP paquets and reconstruct them as a file that will be placed in a specific directory. Moreover, a web server must be running on the machine in order to enable the administration page.\\
+
+In summary, the receiver will contain :
+\begin{itemize}
+\item{A UDP server}
+\item{A web server}
+\end{itemize}
+
+\subsection{Simulating a data diode}
+At first, instead of using a real data diode, we are going to build the prototype of a data diode by simulating the actual system through software. The unidirectional nature of the data transfer will be simulated by modifying the IP table in a way that will allow traffic in one direction, and drop all traffic going in the other direction.
 
 
 \section{Users}
@@ -179,7 +196,7 @@ FTP users operate from outside the secure network and are allowed to push files 
 
 \subsubsection{Administrators}
 
-TODO xx:
+TODO xx	:
 Administrators can :
 \begin{itemize}
 \item{Shut down the data diode, through the administration page}
