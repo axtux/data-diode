@@ -112,16 +112,17 @@ The following elements are out of scope. This means that the security of these e
 \item{The physical integrity of the hardware}
 \item{The electrical power source}
 \item{The security within the secure network, such as the presence of malwares or other viruses}
+\item{Packets sniffing on the secure network}
 \end{itemize}
 
 
 \section{Data Diode}
 \label{sec:data-diode}
-Based on the goals and objectives specified respectively in section \ref{sec:goals} and section \ref{sec:objectives} and on the project requirements, we are going to implement a \textit{data diode}.\\
+Based on the goals and objectives specified respectively in section \ref{sec:goals} and section \ref{sec:objectives} and in the project requirements, we are going to implement a \textit{data diode}.\\
 
-Just like a diode only conduct current in one direction, a data diode is a networking device that only allows data to flow in one direction. It is composed of two physical servers: one server communicates with the outside network and the other one communicate with the secure network. The two servers are connected together by a single unidirectional fiber optics cable.\\
+Just like an electrical diode only conduct electrical current in one direction, a data diode is a networking device that only allows data to flow in one direction. It is composed of two physical servers: one server communicates with the outside network and the other one communicate with the secure network. The two servers are to one another by a single unidirectional fiber optics cable.\\
 
-A fiber optic connection normally uses two cables: one for each direction. In the case of 	 data diode, only one cable is used, allowing the data to flow in one direction. The cable going in the other direction is physically cut. As a consequence, data going through a data diode can only flow in one direction, which is required by the goals defined in section \ref{sec:goals}.\\
+A fiber optic connection normally uses two cables: one for each direction. In the case of 	 data diode, only one cable is used, allowing the data to flow in one direction. The cable going in the other direction is physically cut. As a consequence, data going through a data diode can only flow in one direction, which is one of the goals required in section \ref{sec:goals}.\\
 
 The one-way communication channel between the two sides of the data-diode forbids the use of usual TCP based protocols (such as HTTP or FTP), as TCP requires bi-directional communication between two parties. As data between the two sides of the data-diode can only flow in one direction, we need data to be send over a protocol that doesn't require bi-directional communication. This can be done by using UDP for the communication between our two servers.\\
 
@@ -137,28 +138,28 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 \subsection{Applications}
 With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service, as specified in our goals and objectives (section \ref{sec:goals} and section \ref{sec:objectives}).\\
 
-Other applications such as email management and web browsing will be considered for future versions of the data-diode.
+Other applications such as email management and web browsing will be considered in future versions.
 
 \subsubsection{File Transfer (FTP)}
-The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
+The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data-diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
 
-The management of the FTP accounts is handled by administrators through the data diode administration page, as described in section \ref{sec:administration}.
+The management of the FTP accounts is handled by administrators through the data-diode administration page, as described in section \ref{sec:administration}.
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data diode. We will implement an HTTP server, on the internal side of the data diode. This administration interface will allow administrators:
+One of the goals of this project is the creation of a web interface for managing the data-diode. We will implement an HTTP server, on the internal side of the data-diode to host the administration interface. This administration interface will allow administrators to:
 
 \begin{itemize}
 \item{Monitor file transfers: the administrator should be able to see what files have been transferred, or see if there has been issues regarding the transfer of a file}
 \item{Create or delete FTP accounts}
 \item{Start, stop or restart the data-diode}
-\item{Purge \textit{download directory}}
+\item{Purge the \textit{download directory}}
 \item{Set or modify the maximum size of the \textit{download directory}}
 \end{itemize} 
 
 
 \subsection{Physical Architecture}
-The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the server facing the secure network is called \textit{the receiver}.\\
+The data-diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the server facing the secure network is called \textit{the receiver}.\\
 
 Each server contains the following components :
 \begin{itemize}
@@ -167,7 +168,7 @@ Each server contains the following components :
 \end{itemize}
 
 \subsection{Software architecture}
-The data diode is composed of two servers, \textit{the sender} and \textit{the receiver}, which have different roles. 
+The data-diode is composed of two servers, \textit{the sender} and \textit{the receiver}, which have different roles. 
 
 \subsubsection{The Sender}
 The \textit{sender} must be able to receive FTP PUT requests from the outside network and to transmit data to the \textit{receiver} via UDP.\\
@@ -187,8 +188,8 @@ In summary, the receiver will contain :
 \item{A web server}
 \end{itemize}
 
-\subsection{Simulating a data diode}
-At first, instead of using a real data diode, we are going to build the prototype of a data diode by simulating the actual system through software. The unidirectional nature of the data transfer will be simulated by modifying the IP table in a way that will allow traffic in one direction, and drop all traffic going in the other direction.
+\subsection{Simulating a data-diode}
+At first, instead of using a real data-diode, we are going to build the prototype of a data-diode by simulating the actual system through software. The unidirectional nature of the data transfer will be simulated by modifying the IP table in a way that will allow traffic in one direction, and drop all traffic going in the other direction.
 
 
 \section{Users}
@@ -201,11 +202,11 @@ Simple users are users from inside the secure network. Their main interaction wi
 The role of the administrators is to manage the system so that it runs smoothly. They have access to all the functionalities of the administration interface as described in section \ref{sec:administration}.
 
 \subsection{FTP Users}
-FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data diode, created by an administrator. This account allows him to push data through the data diode, via an FTP connection.
+FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data-diode, created by an administrator. This account allows him to push data through the data-diode, via an FTP connection.
 
 \section{Administration and Management}
 \subsection{Users Administration}
-The administration interface allows administrators to manage the user that can access the data diode. The users from outside of the data diode are responsible for pushing files into the \textit{download directory}. The user from the inside of the secure network will then access the web interface to retrieve the files they want on their computer.
+The administration interface allows administrators to manage the user that can access the data-diode. The users from outside of the data-diode are responsible for pushing files into the \textit{download directory}. The user from the inside of the secure network will then access the web interface to retrieve the files they want on their computer.
 
 \subsubsection{Administration of Simple Users}
 We decide that every user inside the secure network should be able to access the files that have been imported into the \textit{download directory}. Therefore, there will be no specific management of these users.
@@ -213,25 +214,25 @@ We decide that every user inside the secure network should be able to access the
 \subsubsection{Administrators of other Administrators}
 Administrators are able to create an administrator account, or to suspend the account of another administrator.
 
-\subsection{Data Diode Installation, Configuration and Administration}
+\subsection{data-diode Installation, Configuration and Administration}
 
 \subsubsection{Installation}
-The data diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
+The data-diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
 
 \subsubsection{Configuration}
-The data diode settings will be specified in a configuration file that can be modified manually. The settings include the HTTP port that must be used, and the maximum size of the \textit{download directory}.
+The data-diode settings will be specified in a configuration file that can be modified manually. The settings include the HTTP port that must be used, and the maximum size of the \textit{download directory}.
 
 \subsubsection{Administration}
 \section{Risk analysis}
 \subsection{Hardware}
 \subsubsection{Source}
-Someone malicious manage to get physical access to the data-diode. The hacker can then branch a device to the data diode to read or send packets to the data diode.
+Someone malicious manage to get physical access to the data-diode. The hacker can then branch a device to the data-diode to read or send packets to the data-diode.
 \subsubsection{Threats}
 The hacker can
 \begin{itemize}
 \item shut down the system or make a direct DDOS attack causing the loss of availability of the system.
-\item read or modify the files send to the data diode. The integrity and confidentiality are then corrupted
-\item block files before reaching the data diode.
+\item read or modify the files send to the data-diode. The integrity and confidentiality are then corrupted
+\item block files before reaching the data-diode.
 \end{itemize}
 \subsubsection{Countermeasures}
 The physical access to the system is out of our scope. The risk is then tranfered to the client. However, the risk for the integrity and confidentiality of the system is mitigated by the use of cryptography.
@@ -239,23 +240,23 @@ The physical access to the system is out of our scope. The risk is then tranfere
 \subsubsection{Source}
 An unauthorized person connects into the secure network.
 \subsubsection{Threats}
-This person can then use packet sniffing techniques to read credentials and then try to connect to the data diode with a user or administrator account.
+This person can then use packet sniffing techniques to read credentials and then try to connect to the data-diode with a user or administrator account.
 \subsubsection{Countermeasures}
-As well as the physical access to the data diode, the integrity of the secure network is out of our scope but the use of cryptography mitigate the risk.
+As well as the physical access to the data-diode, the integrity of the secure network is out of our scope but the use of cryptography mitigate the risk.
 \subsection{External network}
 \subsubsection{Source}
-An opponent take knowledge of the IP adress of the data diode.
+An opponent take knowledge of the IP adress of the data-diode.
 \subsubsection{Threats}
 He can then launch a DDOS attack against the system by floating the identification process with fake connection demands. The availability of the system can then be endangered.
 \subsubsection{Countermeasures}
-When the system detects that a certain IP adress unsuccessfully tries to connect itself to the data diode a certain amount of times, we can temporarily ban this IP adress from the access to our system.  The risk is then mitigated.
+When the system detects that a certain IP adress unsuccessfully tries to connect itself to the data-diode a certain amount of times, we can temporarily ban this IP adress from the access to our system.  The risk is then mitigated.
 \subsubsection{Residual risk}
 If the opponent has access to a botnet with enough different IP adresses, he still can DDOS attack our sytem with success. The availability of our sytem could then be suspended.
 \subsection{Administration webpage}
 \subsubsection{Source}
 Someone inside the secure network who has not the administrator status wants to obtain this right.
 \subsubsection{Threats}
-This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data diode or modify users privileges and accounts.
+This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data-diode or modify users privileges and accounts.
 \subsubsection{Countermeasures}
 We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. After a certain amount of failed connections by the IP adress, the system bans this adress.
 \subsection{Users}
@@ -267,7 +268,7 @@ This user can obtain the administrator status if the systems creates a user with
 We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
 \subsection{FTP servers}
 \subsubsection{Source}
-A provider push so many files that the data diode cannot store them all.
+A provider push so many files that the data-diode cannot store them all.
 \subsubsection{Threat}
 A provider can lauch a "DDOS attack" by sending a lot of small files or some really big files.
 \subsubsection{Countermeasure}
