@@ -264,9 +264,13 @@ A system halt during the creation or modification of a user profile gives rights
 This user can obtain the administrator status if the systems creates a user with full rights and then reduces the rights. If the system halts before or during the restrictions, the user can obtain certain rights he should not have.
 \subsubsection{Countermeasures}
 We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
-
 \subsection{FTP servers}
-
+\subsubsection{Source}
+A provider push so many files that the data diode cannot store them all.
+\subsubsection{Threat}
+A provider can lauch a "DDOS attack" by sending a lot of small files or some really big files.
+\subsubsection{Countermeasure}
+We defined a maximum size for the reportory that store the files. When a file is submitted, the system checks if there is enough space for this file.
 
 
 
