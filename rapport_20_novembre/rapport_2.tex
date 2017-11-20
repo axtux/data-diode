@@ -212,7 +212,7 @@ Administrators are able to create an administrator account, or to suspend the ac
 TODO : Cette section décrit l'administration des utilisateurs de type "administrateur". Donc je pense que le texte ci-dessous n'est pas dans la bonne catégorie. Le texte décrit plutot les pouvoir de l'administrateur et devrait donc se situer dans une des sections plus haut ==>\\
 An administrator is able to turn on or off the data diode through the web administration page within the secure network. He also is the users and providers manager. He can create or delete a user or provider account and modify the privileges of the accounts. 
 
-\subsection{Data Diode Installation and Configuration}
+\subsection{Data Diode Installation, Configuration and Administration}
 
 \subsubsection{Installation}
 The data diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
@@ -220,6 +220,7 @@ The data diode is provided to the client with the programs already installed, an
 \subsubsection{Configuration}
 The data diode settings will be specified in a configuration file that can be modified manually. The settings include the HTTP port that must be used, and the maximum size of the \textit{download directory}.
 
+\subsubsection{Administration}
 \section{Risk analysis}
 \subsection{Hardware}
 \subsubsection{Source}
@@ -253,12 +254,17 @@ If the opponent has access to a botnet with enough different IP adresses, he sti
 \subsubsection{Source}
 Someone inside the secure network who has not the administrator status wants to obtain this right.
 \subsubsection{Threats}
-\begin{itemize}
 This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data diode or modify users privileges and accounts.
-\end{itemize}
 \subsubsection{Countermeasures}
 We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. When a certain amount of failed connections by the IP adress, the system bans this adress.
 \subsection{Users}
+\subsubsection{Source}
+A system halt during the creation or modification of a user profile gives rights to this user that he should not have.
+\subsubsection{Threats}
+This user can obtain the administrator status if the systems creates a user with full rights and then reduces the rights. If the system halts before or during the restrictions, the user can obtain certain rights he should not have.
+\subsubsection{Countermeasures}
+We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
+
 \subsection{FTP servers}
 
 
