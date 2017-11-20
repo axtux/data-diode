@@ -16,7 +16,7 @@
 	INFO-Y113 --- Management of Security: \\
 	Concept Of Operations v2}
 
-\author{DANHIER Piere, LECOCQ Alexis, NYAKI Loïc}
+\author{DANHIER Pierre, LECOCQ Alexis, NYAKI Loïc}
 
 \begin{document}
 \maketitle
@@ -98,6 +98,7 @@ The following elements are in scope, which means that it is our responsibility t
 \item{The availability of the file transfer service}
 \item{The confidentiality of user data and credentials when interacting with the data diode (see section \ref{sec:data-diode})}
 \item{The confidentiality of the data within the secure network. There should be no data leak.}
+\item{The integrity of the data pushed through the data diode}
 \end{itemize}
 
 \subsection{Out of scope}
@@ -155,7 +156,7 @@ One of the goals of this project is the creation of a web interface for managing
 
 
 \subsection{Physical Architecture}
-The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the the server facing the secure network is called \textit{the receiver}.\\
+The data diode is composed of two separate servers connected to each other through a unidirectional fiber optics cable. The server facing the outside network is called \textit{the sender}, the server facing the secure network is called \textit{the receiver}.\\
 
 Each server contains the following components :
 \begin{itemize}
@@ -192,7 +193,7 @@ At first, instead of using a real data diode, we are going to build the prototyp
 We identify three types of users : the administrators, the simple users and the FTP users.
 
 \subsection{Simple Users}
-Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files from the \textit{download directory}, by accessing the web interface. They do no posses other privileges than that.
+Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files from the \textit{download directory}, by accessing the web interface. They do no possess other privileges than that.
 
 \subsection{Administrators}
 The role of the administrators is to manage the system so that it runs smoothly. They have access to all the functionalities of the administration interface as described in section \ref{sec:administration}.
@@ -209,7 +210,6 @@ We decide that every user inside the secure network should be able to access the
 
 \subsubsection{Administrators of other Administrators}
 Administrators are able to create an administrator account, or to suspend the account of another administrator.
-
 
 \subsection{Data Diode Installation, Configuration and Administration}
 
@@ -239,12 +239,12 @@ An unauthorized person connects into the secure network.
 \subsubsection{Threats}
 This person can then use packet sniffing techniques to read credentials and then try to connect to the data diode with a user or administrator account.
 \subsubsection{Countermeasures}
-As well as the physical access to the data diode, the integrity of the secure network is out of our scope but the use if cryptography mitigate the risk.
+As well as the physical access to the data diode, the integrity of the secure network is out of our scope but the use of cryptography mitigate the risk.
 \subsection{External network}
 \subsubsection{Source}
 An opponent take knowledge of the IP adress of the data diode.
 \subsubsection{Threats}
-He can then launch a DDOS attack against the system by floating the identification process with fake connection demands. The availability of the systemc can then be endangered.
+He can then launch a DDOS attack against the system by floating the identification process with fake connection demands. The availability of the system can then be endangered.
 \subsubsection{Countermeasures}
 When the system detects that a certain IP adress unsuccessfully tries to connect itself to the data diode a certain amount of times, we can temporarily ban this IP adress from the access to our system.  The risk is then mitigated.
 \subsubsection{Residual risk}
@@ -255,17 +255,21 @@ Someone inside the secure network who has not the administrator status wants to 
 \subsubsection{Threats}
 This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data diode or modify users privileges and accounts.
 \subsubsection{Countermeasures}
-We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. When a certain amount of failed connections by the IP adress, the system bans this adress.
+We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. After a certain amount of failed connections by the IP adress, the system bans this adress.
 \subsection{Users}
 \subsubsection{Source}
 A system halt during the creation or modification of a user profile gives rights to this user that he should not have.
 \subsubsection{Threats}
-This user can obtain the administrator status if the systems creates a user with full rights and then reduces the rights. If the system halts before or during the restrictions, the user can obtain certain rights he should not have.
+This user can obtain the administrator status if the systems creates a user with full rights and then reduces the rights. If the system halts before or during the restrictions, the user can remain with certain rights he should not have.
 \subsubsection{Countermeasures}
 We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
-
 \subsection{FTP servers}
-
+\subsubsection{Source}
+A provider push so many files that the data diode cannot store them all.
+\subsubsection{Threat}
+A provider can lauch a "DDOS attack" by sending a lot of small files or some really big files.
+\subsubsection{Countermeasure}
+When a user send a certain amount of data, he needs to wait before sending again some new data. That prevents the "DDOS attack" risk and mitigate the starving risk for other users.
 
 
 
