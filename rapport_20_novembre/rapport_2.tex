@@ -267,6 +267,8 @@ This user can obtain the administrator status if the systems creates a user with
 \subsubsection{Countermeasures}
 We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
 \subsection{FTP servers}
+
+
 \subsubsection{Source}
 A FTP user keeps pushing files in such a way that they exceed the capacity of the filesystem.
 
@@ -276,6 +278,13 @@ A provider can lauch a "DDOS attack" by sending a lot of small files or some rea
 The system automatically checks that the size limit of the download directory isn't exceeded, as described in section  \ref{sec:administration}.\\
 
 Moreover, when a user send a certain amount of data, he will need to wait before sending anymore data. That can prevent "DDOS attack" risks and mitigate the starving risk for other users.
+\subsection{A ajouter}
+\begin{itemize}
+\item Risque retrait disque
+\item Risque perte paquet UDP
+\item Risque utilisation BlindFTP
+\item Matrice de risque 
+\end{itemize}
 
 
 
