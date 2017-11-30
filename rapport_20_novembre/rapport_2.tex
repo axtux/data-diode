@@ -260,21 +260,22 @@ The whole point of installing a data diode is to keep the inside network safe fr
 \subsection{Threats Identification}
 
 \subsubsection{Threat 1: Outside attack}
+From the outside of the secure network, the only possible target is the data diode. 
 \textbf{Denial of service attack} If an opponent takes knowledge of the system IP adress, he can launch a DDoS attack against the authentification process in the data diode.  \\
 \subsubsection{Threat 2: Physical access to the data diode}
-\textbf{Shut down of the data diode}\\
-\textbf{Packet sniffing}\\
-\textbf{Hard drive removal}\\
-\textbf{Destruction of the data diode}\\
-\textbf{DDoS attack}\\
+\textbf{Shut down of the data diode} With a direct access to the device, the opponent can turn off the alimentation switch or pull the electical plug out of the date diode.\\
+\textbf{Packet sniffing} He can also connect a device that will allow him to intercept the packets on going to and out of the data diode. These packets can be users/administrator credentials or data sent through the diode.\\
+\textbf{Hard drive removal} The effect of a disk removal depends on the role of this disk. If it contains the operating system of a server, this server will completely be unusable. If the removed disk is for data storage, the content of this disk will be unreachable but the rest of the application will still work.\\
+\textbf{Destruction of the data diodeIf the opponent destroy the device, the service will obviously be unavailable.}\\
+\textbf{DDoS attack} With a direct connection to the diode, the opponent can send flood the networks interface of the diode with fake network traffic.\\ 
 \subsubsection{Threat 3: Physical access to the inside network }
-\textbf{Packet sniffing}\\
-\textbf{DDos Attack}\\
-\textbf{SQL injection on the webpage}\\
-\textbf{Brute force on the webpage}\\
-\textbf{Privilege escalation}\\
+\textbf{Packet sniffing} Interception of users or administrator credentials. \\
+\textbf{DDos Attack} Flooding the login webpage with fake credentials \\
+\textbf{SQL injection on the webpage} Injection of a SQL request into the login user input areas with the objective of beeing authenticated as a user or administrator without knowing the login or the password. \\
+\textbf{Brute force on the webpage} Launching a brute force attack on the login page of the adminastration website.\\
+\textbf{Privilege escalation} Obtaining privileges that you're not suppose to own.\\
 \subsubsection{Threat 4: Users}
-\textbf{Human error}\\
+\textbf{Human error} \\
 \textbf{Malicious user}\\
 \textbf{Social engineering}\\
 \subsubsection{Threat 5: Providers}
