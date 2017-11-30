@@ -118,7 +118,7 @@ The following elements are out of scope. This means that the security of these e
 
 \section{Data Diode}
 \label{sec:data-diode}
-Based on the goals and objectives specified respectively in section \ref{sec:goals} and section \ref{sec:objectives} and in the project requirements, we are going to implement a \textit{data diode}.\\
+To ensure the integrity and the confidentiality of the data within our system and the availability of the service, we are going to implement a \textit{data diode}.\\
 
 Just like an electrical diode only conduct electrical current in one direction, a data diode is a networking device that only allows data to flow in one direction. It is composed of two physical servers: one server communicates with the outside network and the other one communicate with the secure network. The two servers are to one another by a single unidirectional fiber optics cable.\\
 
@@ -138,8 +138,6 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 \subsection{Applications}
 With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service, as specified in our goals and objectives (section \ref{sec:goals} and section \ref{sec:objectives}).\\
 
-Other applications such as email management and web browsing will be considered in future versions.
-
 \subsubsection{File Transfer (FTP)}
 The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data-diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
 
@@ -156,6 +154,8 @@ One of the goals of this project is the creation of a web interface for managing
 \item{Purge the \textit{download directory}}
 \item{Set or modify the maximum size of the \textit{download directory}}
 \end{itemize} 
+
+
 
 
 \subsection{Physical Architecture}
