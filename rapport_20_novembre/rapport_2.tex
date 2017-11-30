@@ -234,6 +234,79 @@ The data-diode is provided to the client with the programs already installed, an
 The data-diode settings will be specified in a configuration file that can be modified manually. The settings include the \textit{HTTP port} that must be used, and the maximum size of the \textit{download directory}.
 
 \section{Risk analysis}
+\subsection{Assets Identification}
+The assets are the ressources that we are trying to protect inside of our system. We want to prevent a opponent to steal, corrupt or destroy any of the client's assets.
+\subsubsection{Information}
+TODO
+\begin{itemize}
+\item User/Admin credentials
+\item Data from the inside network
+\item Files transfered by the FTP server on the diode
+\item System Configuration Files
+\item Intellectual properties
+\end{itemize}
+
+\subsubsection{Data diode}
+TODO
+\begin{itemize}
+\item The hardware : 2 servers
+\item The software : OS, applications, configuration webpage
+\end{itemize}
+\subsubsection{Inside network}
+The whole point of installing a data diode is to keep the inside network safe from any loss of data
+\begin{itemize}
+\item Machines inside the network
+\end{itemize}
+\subsection{Threats Identification}
+
+\subsubsection{Threat 1: Outside attack}
+\textbf{Denial of service attack} If an opponent takes knowledge of the system IP adress, he can launch a DDoS attack against the authentification process in the data diode.  \\
+\subsubsection{Threat 2: Physical access to the data diode}
+\textbf{Shut down of the data diode}\\
+\textbf{Packet sniffing}\\
+\textbf{Hard drive removal}\\
+\textbf{Destruction of the data diode}\\
+\textbf{DDoS attack}\\
+\subsubsection{Threat 3: Physical access to the inside network }
+\textbf{Packet sniffing}\\
+\textbf{DDos Attack}\\
+\textbf{SQL injection on the webpage}\\
+\textbf{Brute force on the webpage}\\
+\textbf{Privilege escalation}\\
+\subsubsection{Threat 4: Users}
+\textbf{Human error}\\
+\textbf{Malicious user}\\
+\textbf{Social engineering}\\
+\subsubsection{Threat 5: Providers}
+\textbf{Human error}\\
+\textbf{Malicious user}\\
+\textbf{Social engineering}\\
+\textbf{DDos attack}\\
+\subsubsection{Threat 6: Administrators}
+\textbf{Human error}\\
+\textbf{Malicious user}\\
+\textbf{Social engineering}\\
+\subsubsection{Threat 7: System failure}
+\textbf{Cut of the power supply}\\
+\textbf{UDP packet loss}\\
+\textbf{Bug}\\
+\textbf{FTPBlind}\\
+\subsubsection{Threat 8: Malwares}
+\textbf{Inside the secure network}\\
+\textbf{Outside the secure network}\\
+
+\subsection{Threats Assessments}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Treat & Source & Likelyhood & Impact & Evaluation \\
+\hline
+
+\end{tabular}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Hardware}
 \subsubsection{Source}
 Someone malicious manage to get physical access to the data-diode. The hacker can then branch a device to the data-diode to read or send packets to the data-diode.
