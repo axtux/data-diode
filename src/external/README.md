@@ -1,7 +1,7 @@
 # External side of data diode
 
 ## Configuration
-Internal side IP, port and external users can be changed into `config.php`. To regenerate `config.json`, run :
+Internal side IP, port and external users can be changed into `gen_config.php`. To regenerate `config.json`, run :
 ```bash
 $ make config
 ```
@@ -14,7 +14,7 @@ $ make run
 This will launch web server on `0.0.0.0:8888`. IP and port can be changed in `Makefile`.
 
 ## Installation
-To install the server to production, copy `index.php` and `config.json` files to your web server root directory.
+To install the server to production, copy `index.php`, `config.php` and `config.json` files to your web server root directory.
 
 ## Usage
 ### Authentication
