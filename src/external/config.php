@@ -1,20 +1,28 @@
 <?php
 
-$config = array(
-  'ip' => '127.0.0.1',
-  'port' => 4242,
-);
-
-$config['users'] = array(
-  array(
-    'id' => 'test',
-    'md5pass' => md5('test'),
-  ),
-);
-
-$r = file_put_contents('config.json', json_encode($config));
-if ($r === false)
+function save_config($config)
 {
-  exit('error saving config'."\n");
+  $r = file_put_contents('config.json', json_encode($config));
+  if ($r === false)
+  {
+    return false;
+  }
+  return true;
 }
-exit('successfully saved config'."\n");
+
+function load_config()
+{
+  $json = @file_get_contents('config.json');
+  if ($json === false)
+  {
+    return false;
+  }
+  
+  $data = json_decode($json, true);
+  if ($data === null)
+  {
+    return false;
+  }
+  
+  return $data;
+}

@@ -1,5 +1,7 @@
 <?php
 
+require_once('config.php');
+
 function api_response($code, $success, $message)
 {
   http_response_code($code);
@@ -21,23 +23,6 @@ function success($message)
 function error($message)
 {
   api_response(400, false, $message); // bad request
-}
-
-function read_config()
-{
-  $json = @file_get_contents('config.json');
-  if ($json === false)
-  {
-    error('Bad configuration (1).');
-  }
-  
-  $data = json_decode($json, true);
-  if ($data === null)
-  {
-    error('Bad configuration (2).');
-  }
-  
-  return $data;
 }
 
 function check_auth($users)
@@ -147,7 +132,11 @@ function send_data($data, $ip, $port)
   success('Data processed.');
 }
 
-$config = read_config();
+$config = load_config();
+if ($config === false)
+{
+  error('Bad configuration.');
+}
 check_auth($config['users']);
 $data = json_data();
-send_data($data, $config['ip'], $config['port']);
+send_data($data, $config['internal_ip'], $config['internal_port']);
