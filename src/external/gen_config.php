@@ -2,17 +2,21 @@
 
 require_once('config.php');
 
-$config = array(
-  'internal_ip' => '127.0.0.1',
-  'internal_port' => 4242,
-  'admin_pass' => md5('test'),
+$config = array();
+
+$config['internal'] = array(
+  'ip' => '127.0.0.1',
+  'port' => 4242,
+);
+
+$config['admins'] = array(
+  // 'ID' => 'md5pwd'
+  'test' => md5('test'),
 );
 
 $config['users'] = array(
-  array(
-    'id' => 'test',
-    'md5pass' => md5('test'),
-  ),
+  // 'ID' => 'md5pwd'
+  'test' => md5('test'),
 );
 
 if (save_config($config))

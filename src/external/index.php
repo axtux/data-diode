@@ -5,7 +5,7 @@ require_once('config.php');
 function api_response($code, $success, $message)
 {
   http_response_code($code);
-  header('Content-Type: application/json');
+  header('Content-Type: application/json; charset=utf-8');
   //header('X-Powered-By: Data-Diode');
   header_remove('X-Powered-By');
   $data = array(
@@ -58,22 +58,12 @@ function check_auth($users)
   $id = substr($auth, 0, $sep);
   $pass = substr($auth, $sep+1);
   
-  foreach($users as $user)
+  if (empty($users[$id]) || $users[$id] !== md5($pass))
   {
-    if ($user['id'] !== $id)
-    {
-      continue;
-    }
-    
-    if ($user['md5pass'] === md5($pass))
-    {
-      return true;
-    }
-    
-    error('Unauthorized user.');
+     error('Unauthorized user.');
   }
   
-  error('Unauthorized user.');
+  return true;
 }
 
 function json_data()
@@ -109,7 +99,7 @@ function random_id($length=30)
   return base64_encode($bytes);
 }
 
-function send_data($data, $ip, $port)
+function send_data($data, $internal)
 {
   $wrapper = array(
     'time' => time(),
@@ -122,7 +112,7 @@ function send_data($data, $ip, $port)
   $sock = udp_socket();
   for ($i = 0; $i < 3; $i++)
   {
-    $r = socket_sendto($sock, $json, $len, null, $ip, $port);
+    $r = socket_sendto($sock, $json, $len, null, $internal['ip'], $internal['port']);
     if ($r !== $len)
     {
       error('Error processing data (2).');
@@ -139,4 +129,4 @@ if ($config === false)
 }
 check_auth($config['users']);
 $data = json_data();
-send_data($data, $config['internal_ip'], $config['internal_port']);
+send_data($data, $config['internal']);
