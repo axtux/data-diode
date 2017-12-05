@@ -1,3 +1,7 @@
+================================
+====     Networks         ======
+================================
+
 Multiple Network Interfaces:
 -----------------------------
 https://stackoverflow.com/questions/34110416/start-container-with-multiple-network-interfaces
@@ -10,3 +14,13 @@ docker network inspect container_name
 
 This command displays information about the network, and about the containers that are connected
 to this network.
+
+List docker networks:
+----------------------
+docker network ls
+
+
+
+Run container in a network:
+---------------------------
+docker run <container> --net=<network>
