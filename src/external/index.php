@@ -63,7 +63,7 @@ function check_auth($users)
      error('Unauthorized user.');
   }
   
-  return true;
+  return $id;
 }
 
 function json_data()
@@ -99,11 +99,12 @@ function random_id($length=30)
   return base64_encode($bytes);
 }
 
-function send_data($data, $internal)
+function send_data($data, $user, $internal)
 {
   $wrapper = array(
     'time' => time(),
     'id' => random_id(),
+    'user' => $user,
     'data' => $data,
   );
   $json = json_encode($wrapper);
@@ -127,6 +128,6 @@ if ($config === false)
 {
   error('Bad configuration.');
 }
-check_auth($config['users']);
+$user = check_auth($config['users']);
 $data = json_data();
-send_data($data, $config['internal']);
+send_data($data, $user, $config['internal']);
