@@ -1,7 +1,7 @@
 # External side of data diode
 
 ## Configuration
-Internal side IP, port and external users can be changed into `gen_config.php`. To regenerate `config.json`, run :
+Internal side IP, port, admins and external users can be changed into `gen_config.php`. To regenerate `config.json`, run :
 ```bash
 $ make config
 ```
@@ -11,10 +11,10 @@ To test your application server, you can run the PHP web server :
 ```bash
 $ make run
 ```
-This will launch web server on `0.0.0.0:8888`. IP and port can be changed in `Makefile`.
+This will launch web server on `0.0.0.0:8888`. IP and port can be changed in `Makefile`. You can make test requests using [RESTer browser extension](https://github.com/frigus02/RESTer).
 
 ## Installation
-To install the server to production, copy `index.php`, `config.php` and `config.json` files to your web server root directory.
+To install the server in production, copy `index.php`, `config.php` and `config.json` files to your web server root directory. If you want to manage users from a web interface, you can also copy `admin.php`.
 
 ## Usage
 ### Authentication
