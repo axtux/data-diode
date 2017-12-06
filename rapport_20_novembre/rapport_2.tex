@@ -84,7 +84,7 @@ A fiber optic connection normally uses two cables: one for each direction. In th
 
 The one-way communication channel between the two sides of the data-diode forbids the use of usual TCP based protocols (such as HTTP or FTP), as TCP requires bi-directional communication between two parties. As data between the two sides of the data-diode can only flow in one direction, we need data to be send over a protocol that doesn't require bi-directional communication. This can be done by using UDP for the communication between our two servers.\\
 
-However UDP comes with its own limitations, as it doesn't ensure the order at which the paquets arrive, nor does it manage packets loss. These issues will therefore need to be taken into account at the software level.
+However UDP comes with its own limitations, as it doesn't ensure the order at which the paquets arrive, nor does it manage packets loss. These issues will therefore need to be taken into account at the software level.\\
 
 
 \begin{figure}
@@ -94,12 +94,12 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 
 
 \subsection{Applications}
-
-We propose a JSON API to import files comming from connected devices to a secure network.
+\subsubsection{JSON API}
+We propose a JSON API to import files comming from connected devices to a secure network. To push data, a device needs to send a HTTP request to the outside machine with the basic authentication of the protocol in the headers and the JSON file in the body. When the request is received, the outside machine parse the HTTP request into a JSON file and send it with UDP to the secure side server. This machine will then store the file.
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data-diode. We will implement a web interface on the unsecure side that allows administrators to add new users and a second web interface on the secure side that monitor the arrival of the UDP packets.
+One of the goals of this project is the creation of a web interface to manage the data-diode. We will implement a web interface on the unsecure side that allows administrators to add new users or new administrators and a second web interface on the secure side that monitors the arrival of the UDP packets and creates an access to the data.
 
 \subsubsection{Mockups}
 \textbf{Unsecure side webpage}
@@ -129,7 +129,7 @@ Each server contains the following components :
 The data-diode is composed of two servers, \textit{the sender} and \textit{the receiver}, which have different roles. 
 
 \subsubsection{The Sender}
-The \textit{sender} must be able to receive HTTP requests from the outside network and to transmit data to the \textit{receiver} via UDP.\\
+The \textit{sender} must be able to receive HTTP requests from the outside network and to transmit JSON files to the \textit{receiver} via UDP.\\
 
 The sender must therefore be comprised of :
 \begin{itemize}
@@ -139,7 +139,7 @@ The sender must therefore be comprised of :
 \end{itemize} 
 
 \subsubsection{The Receiver}
-The \textit{receiver} must be able to receive UDP paquets and reconstruct them as a file that will be placed in a database. \\
+The \textit{receiver} must be able to receive UDP paquets and reconstruct them as a JSON file that will be placed in a database. \\
 
 In summary, the receiver will contain :
 \begin{itemize}
@@ -156,29 +156,23 @@ At first, instead of using a real data-diode, we are going to build the prototyp
 We identify two types of users : the administrators and the simple users.
 
 \subsection{Simple Users}
-Simple users are users that push data with their connected devices.
-
+Simple users are the data pushers using their connected devices.
 \subsection{Administrators}
-The role of the administrators is to manage the system so that it runs smoothly. They have access to all the functionalities of the administration interface as described in section \ref{sec:administration}.
-
+The role of the administrators is to manage the users and other administrators .
 \section{Administration and Management}
-
 \subsubsection{Administration of Simple Users}
-Administrators can create and delete user accounts.
+Administrators can create and delete user accounts. If a user lost his password, he needs to contact an administrator who will give him a new one.
 
 \subsubsection{Administration of other Administrators}
 Administrators are able to create an administrator account, or to suspend the account of another administrator.
-
 \subsection{data-diode Installation and Configuration}
-
 \subsubsection{Installation}
 The data-diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
-
 \subsubsection{Configuration}
 The data-diode settings will be specified in a configuration file that can be modified manually.
-
 \section{Risk analysis}
 \subsection{Threat sources}
+We identified several threat sources:\\
 \begin{itemize}
 \item Malicious user
 \item Administrator mistake
@@ -279,9 +273,9 @@ None & None & Extreme \\
 \textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 4 : Flooding of the receiver }
-\textbf{Source} \\A malicious user send a lot of files in the goal of overloading the receiver\\
-\textbf{Component} \\The receiver server\\
+\subsubsection{Risk 4 : Flooding of the sender }
+\textbf{Source} \\A malicious user send a lot of files in the goal of overloading the sender\\
+\textbf{Component} \\The sender server\\
 \textbf{Description}\\ The user will overload the system with data pushes. 
 \\
 \textbf{Impact}\\
@@ -408,10 +402,23 @@ Major & None & None \\
 \textbf{Likelihood}\\ Having a malicious administrator is unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 12 : XSS the outside login webpage}
-TODO
-\subsubsection{Risk 13 : CSRF on the outside webpage}
-TODO
+\subsubsection{Risk 12 : CSRF in the outside webpage}
+\textbf{Source} \\A malicious user wants to modify the users or administrators accounts.\\
+\textbf{Component} \\The outside managment webpage\\
+\textbf{Description}\\This malicious user forges a request so that an administrator session is used to modify accounts.   \\
+\textbf{Impact}\\
+With this technique, the user can create an administrator account for himself or modify other accounts. He can then block the import of the data to the secure network. \\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+None & None & Major \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\The opponent needs the unawareness of an administrator to lauch this attack. This event is then unlikely to occur.\\
+\textbf{Risk level}\\Medium\\
+
+
 
 
 
@@ -426,7 +433,7 @@ Treat & Source & Impact& Likelihood & Evaluation \\
 \hline
 3 & Deterioration of the diode & Extreme & Unlikely & Medium\\
 \hline
-4 & Flooding the receiver & Moderate & Likely & Medium\\
+4 & Flooding the sender & Moderate & Likely & Medium\\
 \hline
 5 & Flooding on outside webpage & Moderate & Likely & Medium \\
 \hline 
@@ -442,6 +449,9 @@ Treat & Source & Impact& Likelihood & Evaluation \\
 \hline
 11 & Deletion of administrator accounts & Major & Unlikely & Medium \\
 \hline
+12 & CSRF on the outside webpage & Major & Unlikely & Medium \\
+\hline
+
   
 \end{tabular}
 \subsection{Countermeasures}
@@ -450,7 +460,7 @@ As security has a significative price for a company, we assume that low risks sh
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
 \subsubsection{Risk 3 : Deterioration of the diode}
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
-\subsubsection{Risk 4 : Flooding on the receiver}
+\subsubsection{Risk 4 : Flooding on the sender}
 
 \subsubsection{Risk 5 : Flooding of the outside webpage}
 
