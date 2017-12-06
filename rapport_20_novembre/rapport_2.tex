@@ -40,53 +40,11 @@ Goals define the general direction of what the organization aims to accomplish, 
 
 \begin{enumerate}
 \item{Create a device that completely prevents the exfiltration of data from a secure network, while allowing data to be transferred from the outside world into that secure network.}
-\item{Ensure the availability of the system. The services should always be up, with no downtime}
-\item{Allow specific users to manage and operate this system through an administration web page, accessible from within the secure network.}
+\item{Ensure the availability of the system. The down times should be as minimum as possible.}
+\item{Allow specific users to manage and monitor this system through an administration web page.}
 \end{enumerate}
 
 In this project, the general solution is imposed and should be a data diode, which will be described in section~\ref{sec:data-diode}.
-
-
-\section{Objectives}
-\label{sec:objectives}
-Objectives can be considered as the building parts goals. They are concrete and can be achieved by following a certain number of steps. Achieving all the objectives should translate into achieving all the goals.\\
-
-
-We identify the following general objectives:
-\begin{itemize}
-\item{Build a web interface for administrating the data diode}
-\item{Use the File Transfer Protocol to implement a file transfer functionality between the outside network and the secure network.}
-\end{itemize}
-
-The next sections identify more specific objectives.
-
-\subsection{Data Confidentiality}
-There should be no way for data to leak outside of the secure network. Preventing physical access to a computer in the secure network is out of the scope of this project (see section \ref{sec:outscope}).\\
-
-The objectives for ensuring data confidentiality are as follows:
-
-\begin{itemize}
-\item{Physically prevent data from exiting the secure network}
-\item{When establishing communication with the system, user credentials and information shouldn't be exposed to other users.}
-\end{itemize}
-
-\subsection{Data Integrity}
-The data retrieved from the outside of the network should be the same as the data that was initially sent. No data corruption or modification should take place.
-
-\subsection{System Availability}
-The system should always be up, unless it is turned off on purpose by a legitimate user or administrator.
-
-The objectives for ensuring system availability are as follows:
-
-\begin{itemize}
-\item{The system must keep working no matter how many files are pushed onto the system}
-\item{An authorized user should always be able to transfer a file into the secure network}
-\item{An authorized user should always be able to access and operate the administration page}
-\item{In case of system crash, the system must restarted immediately}
-\item{The web interface should always be accessible and working as intended. Therefore, measures should be taken against Cross site scripting (XSS) and Cross Site Request Forgery attacks (CSRF).}
-
-\end{itemize}
-
 
 \section{Scope}
 It is important to precisely identify the scope of this project, in relation to our goals and objectives.\\
@@ -97,9 +55,9 @@ Our solution is destined to be integrated in an existing system. As such, when c
 The following elements are in scope, which means that it is our responsibility to make sure that the security of these elements is ensured.
 
 \begin{itemize}
-\item{The availability of the file transfer service}
+\item{The availability of the service}
 \item{The confidentiality of user data and credentials when interacting with the data diode (see section \ref{sec:data-diode})}
-\item{The confidentiality of the data within the secure network. There should be no data leak.}
+\item{The impossibility to exfiltrate data from the secure network.}
 \item{The integrity of the data pushed through the data diode}
 \end{itemize}
 
@@ -112,7 +70,6 @@ The following elements are out of scope. This means that the security of these e
 \item{The physical integrity of the hardware}
 \item{The electrical power source}
 \item{The security within the secure network, such as the presence of malwares or other viruses}
-\item{Packets sniffing on the secure network}
 \end{itemize}
 
 
@@ -130,30 +87,18 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 
 
 \begin{figure}
-	\includegraphics[scale=0.7]{img/network.png}
-	\caption{High level architecture of a data diode.}
+	\includegraphics[scale=0.7]{img/system.png}
+	\caption{High level architecture of our data diode.}
 \end{figure}
 
 
 \subsection{Applications}
-With this data diode, we decided to keep things simple and to focus on proposing the two following services: a File Transfer service, as well as a data-diode administration service, as specified in our goals and objectives (section \ref{sec:goals} and section \ref{sec:objectives}).\\
 
-\subsubsection{File Transfer (FTP)}
-The main application of this project is a file transfer service that will enable files to be pushed from the outside network into a directory situated in the inner part of the data-diode, through the use of the File Transfer Protocol (FTP). That directory will be referred as the \textit{download directory}\\
-
-The management of the FTP accounts is handled by administrators through the data-diode administration page, as described in section \ref{sec:administration}.
+We propose a JSON API to import files comming from connected devices to a secure network.
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
-One of the goals of this project is the creation of a web interface for managing the data-diode. We will implement an HTTP server, on the internal side of the data-diode to host the administration interface. This administration interface will allow administrators to:
-
-\begin{itemize}
-\item{Monitor file transfers: the administrator should be able to see what files have been transferred, or see if there has been issues regarding the transfer of a file}
-\item{Create or delete FTP accounts}
-\item{Start, stop or restart the data-diode}
-\item{Purge the \textit{download directory}}
-\item{Set or modify the maximum size of the \textit{download directory}}
-\end{itemize}
+One of the goals of this project is the creation of a web interface for managing the data-diode. We will implement a web interface on the unsecure side that allows administrators to add new users and a second web interface on the secure side that monitor the arrival of the UDP packets.
 
 \subsubsection{Mockups}
 \begin{center}
@@ -182,21 +127,23 @@ Each server contains the following components :
 The data-diode is composed of two servers, \textit{the sender} and \textit{the receiver}, which have different roles. 
 
 \subsubsection{The Sender}
-The \textit{sender} must be able to receive FTP PUT requests from the outside network and to transmit data to the \textit{receiver} via UDP.\\
+The \textit{sender} must be able to receive HTTP requests from the outside network and to transmit data to the \textit{receiver} via UDP.\\
 
 The sender must therefore be comprised of :
 \begin{itemize}
-\item{A FTP server}
 \item{A UDP client}
+\item{A web server}
+\item{A php server}
 \end{itemize} 
 
 \subsubsection{The Receiver}
-The \textit{receiver} must be able to receive UDP paquets and reconstruct them as a file that will be placed in a specific directory. Moreover, a web server must be running on the machine in order to enable the administration page.\\
+The \textit{receiver} must be able to receive UDP paquets and reconstruct them as a file that will be placed in a database. \\
 
 In summary, the receiver will contain :
 \begin{itemize}
 \item{A UDP server}
 \item{A web server}
+\item{A php server}
 \end{itemize}
 
 \subsection{Simulating a data-diode}
@@ -204,25 +151,20 @@ At first, instead of using a real data-diode, we are going to build the prototyp
 
 
 \section{Users}
-We identify three types of users : the administrators, the simple users and the FTP users.
+We identify two types of users : the administrators and the simple users.
 
 \subsection{Simple Users}
-Simple users are users from inside the secure network. Their main interaction with the system is that they will need to retrieve the files from the \textit{download directory}, by accessing the web interface. They do no possess other privileges than that.
+Simple users are users that push data with their connected devices.
 
 \subsection{Administrators}
 The role of the administrators is to manage the system so that it runs smoothly. They have access to all the functionalities of the administration interface as described in section \ref{sec:administration}.
 
-\subsection{FTP Users}
-FTP users operate from outside the secure network and are allowed to push files into the secure network. Each FTP user will have an account on the data-diode, created by an administrator. This account allows him to push data through the data-diode, via an FTP connection.
-
 \section{Administration and Management}
-\subsection{Users Administration}
-The administration interface allows administrators to manage the user that can access the data-diode. The users from outside of the data-diode are responsible for pushing files into the \textit{download directory}. The user from the inside of the secure network will then access the web interface to retrieve the files they want on their computer.
 
 \subsubsection{Administration of Simple Users}
-We decide that every user inside the secure network should be able to access the files that have been imported into the \textit{download directory}. Therefore, there will be no specific management of these users.
+Administrators can create and delete user accounts.
 
-\subsubsection{Administrators of other Administrators}
+\subsubsection{Administration of other Administrators}
 Administrators are able to create an administrator account, or to suspend the account of another administrator.
 
 \subsection{data-diode Installation and Configuration}
@@ -231,146 +173,260 @@ Administrators are able to create an administrator account, or to suspend the ac
 The data-diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
 
 \subsubsection{Configuration}
-The data-diode settings will be specified in a configuration file that can be modified manually. The settings include the \textit{HTTP port} that must be used, and the maximum size of the \textit{download directory}.
+The data-diode settings will be specified in a configuration file that can be modified manually.
 
 \section{Risk analysis}
-\subsection{Assets Identification}
-The assets are the ressources that we are trying to protect inside of our system. We want to prevent a opponent to steal, corrupt or destroy any of the client's assets.
-\subsubsection{Information}
-TODO
+\subsection{Threat sources}
 \begin{itemize}
-\item User/Admin credentials
-\item Data from the inside network
-\item Files transfered by the FTP server on the diode
-\item System Configuration Files
-\item Intellectual properties
+\item Malicious user
+\item Administrator mistake
+\item Malicious administrator
+\item Physical access
+\item System failure
+\item System's IP discovered
+\item Zero Day
 \end{itemize}
-
-\subsubsection{Data diode}
-TODO
+\subsection{Components}
+The components are the ressources that we are trying to protect inside of our system. We want to prevent an opponent to steal, corrupt or destroy any of the client's assets.
+\subsubsection{Hardware}
 \begin{itemize}
-\item The hardware : 2 servers
-\item The software : OS, applications, configuration webpage
+\item The data diode
+\item The unsecure network
+\item The secure network
 \end{itemize}
-\subsubsection{Inside network}
-The whole point of installing a data diode is to keep the inside network safe from any loss of data
+\subsubsection{Software}
 \begin{itemize}
-\item Machines inside the network
+\item The inside administration webpage
+\item The outside administration webpage
+\item The inside web and php server
+\item The outside web and php server
+\item The UDP client
+\item The UDP server
 \end{itemize}
-\subsection{Threats Identification}
+\subsection{Risk severity}
+We define here the severity for each components of the CIA triad.
+\subsubsection{Confidentiality}
+Severity of loss of confidentiality:
+\begin{itemize}
+\item More than 1 user credential $->$ Minor
+\item More than 100 user credential $->$ Major
+\item 1 or more administrator credentials $ ->$ Major
 
-\subsubsection{Threat 1: Outside attack}
-From the outside of the secure network, the only possible target is the data diode. 
-\textbf{Denial of service attack} If an opponent takes knowledge of the system IP adress, he can launch a DDoS attack against the authentification process in the data diode.  \\
-\subsubsection{Threat 2: Physical access to the data diode}
-\textbf{Shut down of the data diode} With a direct access to the device, the opponent can turn off the alimentation switch or pull the electical plug out of the date diode.\\
-\textbf{Packet sniffing} He can also connect a device that will allow him to intercept the packets on going to and out of the data diode. These packets can be users/administrator credentials or data sent through the diode.\\
-\textbf{Hard drive removal} The effect of a disk removal depends on the role of this disk. If it contains the operating system of a server, this server will completely be unusable. If the removed disk is for data storage, the content of this disk will be unreachable but the rest of the application will still work.\\
-\textbf{Destruction of the data diodeIf the opponent destroy the device, the service will obviously be unavailable.}\\
-\textbf{DDoS attack} With a direct connection to the diode, the opponent can send flood the networks interface of the diode with fake network traffic.\\ 
-\subsubsection{Threat 3: Physical access to the inside network }
-\textbf{Packet sniffing} Interception of users or administrator credentials. \\
-\textbf{DDos Attack} Flooding the login webpage with fake credentials \\
-\textbf{SQL injection on the webpage} Injection of a SQL request into the login user input areas with the objective of beeing authenticated as a user or administrator without knowing the login or the password. \\
-\textbf{Brute force on the webpage} Launching a brute force attack on the login page of the adminastration website.\\
-\textbf{Privilege escalation} Obtaining privileges that you're not suppose to own.\\
-\subsubsection{Threat 4: Users}
-\textbf{Human error} \\
-\textbf{Malicious user}\\
-\textbf{Social engineering}\\
-\subsubsection{Threat 5: Providers}
-\textbf{Human error}\\
-\textbf{Malicious user}\\
-\textbf{Social engineering}\\
-\textbf{DDos attack}\\
-\subsubsection{Threat 6: Administrators}
-\textbf{Human error}\\
-\textbf{Malicious user}\\
-\textbf{Social engineering}\\
-\subsubsection{Threat 7: System failure}
-\textbf{Cut of the power supply}\\
-\textbf{UDP packet loss}\\
-\textbf{Bug}\\
-\textbf{FTPBlind}\\
-\subsubsection{Threat 8: Malwares}
-\textbf{Inside the secure network}\\
-\textbf{Outside the secure network}\\
-
+\end{itemize}
+\subsubsection{Integrity}
+Severity of corrupted packets:
+\begin{itemize}
+\item More than 0.1\% of the packets are corrupted $->$ Minor
+\item More than 1\% of the packets are corrupted $->$ Moderate
+\item More than 5\% of the packets are corrupted $->$ Major
+\item More than 10\% of the packets are corrupted $->$ Extreme
+\end{itemize}
+\subsubsection{Availability}
+Severity of downtimes:
+\begin{itemize}
+\item More than 10 minutes $->$ Minor
+\item More than 30 minutes $->$ Moderate
+\item More than 1 hour $->$ Major
+\item More than 6 hour $->$ Extreme
+\end{itemize}
 \subsection{Threats Assessments}
+\subsubsection{Risk 1: Outside attack}
+\textbf{Source} \\An unauthorized person takes knowledge of the IP adress of the outside server.\\
+\textbf{Component} \\The outside web and php server\\
+\textbf{Description}\\ This person can send files through the https protocol even if he is not suppose to. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline 
+\emph{Confidentiality} & \emph{Integrity} & \emph{Availability} \\
+\hline
+Trivial & Major & Trivial\\
+\hline
+\end{tabular}\\
+\textbf{Likelihood} We have no view on the discretion of the client for his IP adresses so we assume that it is likely to occur.\\
+\textbf{Risk level} High \\
+
+\subsubsection{Risk 2: packet sniffing from the data diode }
+\textbf{Source} \\A malicious person has a physical access to the data diode\\
+\textbf{Component} \\The data diode\\
+\textbf{Description}\\ This perso can use packet sniffing techniques on the secure and on the unsecure side of the data diode to obtain the credentials of providers , users or administrators \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Major & Major & Trivial \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 3: Shut down of the data diode }
+\textbf{Source} \\A malicious person has a physical access to the data diode\\
+\textbf{Component} \\The data diode\\
+\textbf{Description}\\ This perso can turn off the data diode. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Trivial & Minor \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
+\textbf{Risk level}\\Low\\
+
+\subsubsection{Risk 4: Deterioration of the data diode }
+\textbf{Source} \\A malicious person has a physical access to the data diode\\
+\textbf{Component} \\The data diode\\
+\textbf{Description}\\ This person can damage the data diode.  \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Moderate & Extreme \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 5 : Flooding of the receiver }
+\textbf{Source} \\A malicious user send a lot of files in the goal of overloading the receiver\\
+\textbf{Component} \\The receiver server\\
+\textbf{Description}\\ If this person can send more files that the system can handle, our system can become unavailable for a while. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Trivial & Extreme \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Risk level}\\High\\
+
+\subsubsection{Risk 6 : Flooding of the outside webpage}
+\textbf{Source} \\A malicious person send a lot of connection request in the goal of overload this application. \\
+\textbf{Component} \\The outside webpage\\
+\textbf{Description}\\ If this person can send more requests that the application can handle, the administration webpage can become unavailable \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Trivial & Moderate \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 7 : Brute force on the outside webpage }
+\textbf{Source} \\A malicious user tries to find an administrator identification.\\
+\textbf{Component} \\The outside webpage\\
+\textbf{Description}\\This person can use brute force technique or dictionnary attack to find an administrator account. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Medium & Trivial & Medium \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Risk level}\\High\\
+
+\subsubsection{Risk 8 : SQL injection on the outside webpage }
+\textbf{Source} \\A malicious user tries to connect as an administrator.\\
+\textbf{Component} \\The outside webpage\\
+\textbf{Description}\\This person can use SQL injection in the login page in the goal of being connected as an administrator. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Medium & Trivial & Trivial \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 9 : UDP packet loss  }
+\textbf{Source} \\The UDP connection between our two servers \\
+\textbf{Component} \\The data diode\\
+\textbf{Description}\\As UDP is not a secure protocol, some packets can be lost between our two servers. \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Major & Trivial \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ With a so small optical fiber, the chance to loose a UDP packet are rare.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 10 : Deletion of user account }
+\textbf{Source} \\A malicious administrator \\
+\textbf{Component} \\The outside managment webpage\\
+\textbf{Description}\\This administrator can delete all the user's accounts \\
+\textbf{Impact}\\
+\begin{tabular}{|c|c|c|}
+\hline
+Confidentiality & Integrity & Availability \\
+\hline
+Trivial & Extreme & Extreme \\
+\hline
+\end{tabular}\\
+\textbf{Likelihood}\\ Unlikely\\
+\textbf{Risk level}\\Medium\\
+
+
+
+
+\subsection{Resume}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-Treat & Source & Likelyhood & Impact & Evaluation \\
+Treat & Source & Impact& Likelihood & Evaluation \\
 \hline
-
+1 & Known IP adress & Major & Likely & High\\
+\hline
+2 &  Direct packet sniffing & Major & Unlikely & Medium\\
+\hline
+3 & Shut down of diode & Minor & Unlikely & Low \\
+\hline
+4 & Damage to diode & Extreme & Unlikely & Medium\\
+\hline
+5 & DoS attack on receiver & Extreme & Likely & High\\
+\hline
+6 & Flooding on outside webpage & Moderate & Likely & Medium \\
+\hline 
+7 &  Brute Force on outside webpage & Moderate & Likely & Medium\\
+\hline
+8 & SQL injection on outside webpage & Moderate & Likely & Medium \\
+\hline
+9& UDP packet loss & Major & Rare & Medium \\
+\hline
+10 & Deletion of user account & Extreme & Unlikely & Medium \\
+\hline
+  
 \end{tabular}
 \subsection{Countermeasures}
+As security has a significative price for a company, we assume that low risks should be accepted.
+\subsubsection{Risk 1 : Outside attack}
+\subsubsection{Risk 2 : Packet sniffing on the diode}
+We mitigate the risk by encrypting the credentials while they're on the network.
+\subsubsection{Risk 4 : Damage to the diode}
+As the physical access to the diode is out of our scope, we transfer this risk to the client.
+\subsubsection{Risk 5 : DoS of the receiver}
+
+\subsubsection{Risk 6 : Flooding of the outside webpage}
+\subsubsection{Risk 7 : Brute force on outside webpage}
+\subsubsection{Risk 8 : SQL injection on outside webpage}
+\subsubsection{Risk 9 : UDP packet loss}
+\subsubsection{Risk 10 : Deletion of user accounts}
 
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hardware}
-\subsubsection{Source}
-Someone malicious manage to get physical access to the data-diode. The hacker can then branch a device to the data-diode to read or send packets to the data-diode.
-\subsubsection{Threats}
-The hacker can
-\begin{itemize}
-\item shut down the system or make a direct DDOS attack causing the loss of availability of the system.
-\item read or modify the files send to the data-diode. The integrity and confidentiality are then corrupted
-\item block files before reaching the data-diode.
-\end{itemize}
-\subsubsection{Countermeasures}
-The physical access to the system is out of our scope. The risk is then tranfered to the client. However, the risk for the integrity and confidentiality of the system is mitigated by the use of cryptography.
-\subsection{Secure network}
-\subsubsection{Source}
-An unauthorized person connects into the secure network.
-\subsubsection{Threats}
-This person can then use packet sniffing techniques to read credentials and then try to connect to the data-diode with a user or administrator account.
-\subsubsection{Countermeasures}
-As well as the physical access to the data-diode, the integrity of the secure network is out of our scope but the use of cryptography mitigate the risk.
-\subsection{External network}
-\subsubsection{Source}
-An opponent take knowledge of the IP adress of the data-diode.
-\subsubsection{Threats}
-He can then launch a DDOS attack against the system by floating the identification process with fake connection demands. The availability of the system can then be endangered.
-\subsubsection{Countermeasures}
-When the system detects that a certain IP adress unsuccessfully tries to connect itself to the data-diode a certain amount of times, we can temporarily ban this IP adress from the access to our system.  The risk is then mitigated.
-\subsubsection{Residual risk}
-If the opponent has access to a botnet with enough different IP adresses, he still can DDOS attack our sytem with success. The availability of our sytem could then be suspended.
-\subsection{Administration webpage}
-\subsubsection{Source}
-Someone inside the secure network who doesn't have an administrator status wants to gain administrator rights.
-
-\subsubsection{Threats}
-This person can use SQL injections or try to brute force an administrator account through the login webpage. The brute force attack can endanger the availability of the system. If the opponent manage to get an administrator account he can turn off the data-diode or modify users privileges and accounts.
-\subsubsection{Countermeasures}
-We can avoid these risks by preventing SQL injections in the source code of the login webpage and by detecting unsuccessful connection attempts. After a certain amount of failed connections by the IP adress, the system bans this adress.
-\subsection{Users}
-\subsubsection{Source}
-A system halt during the creation or modification of a user profile gives rights to this user that he should not have.
-\subsubsection{Threats}
-This user can obtain the administrator status if the systems creates a user with full rights and then reduces the rights. If the system halts before or during the restrictions, the user can remain with certain rights he should not have.
-\subsubsection{Countermeasures}
-We avoid this risk by creating users with no rights and then allow him some of them. If the system halts before the end of the creation or modification, the user has no rights he should no have.  
-\subsection{FTP servers}
-
-
-\subsubsection{Source}
-A FTP user keeps pushing files in such a way that they exceed the capacity of the filesystem.
-
-\subsubsection{Threat}
-A provider can lauch a "DDOS attack" by sending a lot of small files or some really big files.
-\subsubsection{Countermeasure}
-The system automatically checks that the size limit of the download directory isn't exceeded, as described in section  \ref{sec:administration}.\\
-
-Moreover, when a user send a certain amount of data, he will need to wait before sending anymore data. That can prevent "DDOS attack" risks and mitigate the starving risk for other users.
-\subsection{A ajouter}
-\begin{itemize}
-\item Risque retrait disque
-\item Risque perte paquet UDP
-\item Risque utilisation BlindFTP
-\item Matrice de risque 
-\end{itemize}
 
 
 
