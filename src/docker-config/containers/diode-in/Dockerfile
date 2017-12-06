@@ -3,9 +3,16 @@ FROM ubuntu:latest
 #===============================================
 #========         INSTALL             ==========
 #===============================================
-#Install php5, apache
-RUN apt-get update && apt-get install -y php5
-RUN apt-get install -y apache2
+#Need this to remove error messages at build time, see : https://github.com/phusion/baseimage-docker/issues/58
+ENV DEBIAN-FRONTEND=noninteractive
+
+# Install apt-utils that seems to be required
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends apt-utils
+
+#Install php7, nginx 
+RUN apt-get install -y php7.0
+RUN apt-get install -y nginx 
 
 #Install ifconfig
 RUN apt-get install -y net-tools
@@ -16,8 +23,9 @@ RUN apt-get install -y iputils-ping
 #===============================================
 #========          Copy FILES         ==========
 #===============================================
+RUN mkdir /files
 #Copy everything in the current directory and copy it in the container. 
-COPY * /
+COPY * /files
  
 #===============================================
 #========          Expose ports       ==========

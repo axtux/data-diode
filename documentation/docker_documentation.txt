@@ -20,7 +20,25 @@ List docker networks:
 docker network ls
 
 
-
+================================
+====     Containers       ======
+================================
 Run container in a network:
 ---------------------------
 docker run <container> --net=<network>
+
+List containers:
+------------------
+docker ps
+
+Rename container:
+-----------------
+docker rename <old name> <new name>
+
+Start container:
+----------------
+sudo docker run -it -d --name <containerName> <image> /bin/bash
+
+Attach to a container:
+----------------------
+sudo docker attach <container>
