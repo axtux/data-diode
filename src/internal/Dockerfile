@@ -21,6 +21,9 @@ RUN apt-get install -y net-tools
 #Install ping (syntax : ping -c <number of paquets> <ip address>)
 RUN apt-get install -y iputils-ping
 
+#Install iptables
+RUN apt-get install -y iptables
+
 #===============================================
 #========          Copy FILES         ==========
 #===============================================

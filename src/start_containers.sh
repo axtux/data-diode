@@ -2,7 +2,7 @@
 # Building container : inner side of the diode
 cd internal/
 sudo docker build . -t diode_in-img
-sudo docker run -t -d --net intra-diode --ip 192.168.0.2  -p 8880:80 --name diode-in diode_in-img
+sudo docker run -t -d --net intra-diode --ip 192.168.0.2  -p 8880:80 --name diode-in --cap-add=NET_ADMIN --cap-add=NET_RAW diode_in-img
 cd -
 
 # Building container : outter side of the diode
