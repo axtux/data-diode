@@ -1,1 +1,1 @@
-docker exec -it ftpin /bin/bash
+sudo docker exec -it outside-machine /bin/bash

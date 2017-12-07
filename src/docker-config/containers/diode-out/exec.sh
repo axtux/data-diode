@@ -1,1 +1,1 @@
-docker exec -it ftpin /bin/bash
+sudo docker exec -it diode-out /bin/bash

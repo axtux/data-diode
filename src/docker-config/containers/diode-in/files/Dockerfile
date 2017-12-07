@@ -3,6 +3,8 @@ FROM ubuntu:latest
 #===============================================
 #========         INSTALL             ==========
 #===============================================
+WORKDIR /files
+
 #Need this to remove error messages at build time, see : https://github.com/phusion/baseimage-docker/issues/58
 ENV DEBIAN-FRONTEND=noninteractive
 
@@ -24,7 +26,7 @@ RUN apt-get install -y iputils-ping
 #========          Copy FILES         ==========
 #===============================================
 #Copy everything in the current directory and copy it in the container. 
-COPY * /
+COPY * ./files/
  
 #===============================================
 #========          Expose ports       ==========

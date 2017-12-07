@@ -4,16 +4,16 @@
 #===============================================================
 
 ################ Network : external-network ###################
-sudo docker connect --ip=200.0.0.10 external-network external-machine
-sudo docker connect --ip=200.0.0.20 external-network diode-out 
+sudo docker network connect --ip 200.0.0.10 external-network outside-machine
+sudo docker network connect --ip 200.0.0.20 external-network diode-out 
 
 ################ Network : intra-diode      ###################
-sudo docker connect --ip=192.168.0.1 intra-diode diode-in 
-sudo docker connect --ip=192.168.0.2 intra-diode diode-out 
+sudo docker network connect --ip 192.168.0.1 intra-diode diode-in 
+sudo docker network connect --ip 192.168.0.2 intra-diode diode-out 
 
 ################ Network : secure-network   ###################
-sudo docker connect --ip=10.0.0.2 secure-network internal-machine
-sudo docker connect --ip=10.0.0.1 secure-network diode-in 
+sudo docker network connect --ip 10.0.0.2 secure-network inside-machine
+sudo docker network connect --ip 10.0.0.1 secure-network diode-in 
 
 
 

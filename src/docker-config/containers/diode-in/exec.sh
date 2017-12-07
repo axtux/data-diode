@@ -1,1 +1,1 @@
-docker exec -it diode_in /bin/bash
+sudo docker exec -it diode-in /bin/bash
