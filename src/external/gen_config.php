@@ -10,13 +10,13 @@ $config['internal'] = array(
 );
 
 $config['admins'] = array(
-  // 'ID' => 'md5pwd'
-  'test' => md5('test'),
+  // 'ID' => 'salt|md5pwd'
+  'test' => '|'.md5('test'),
 );
 
 $config['users'] = array(
-  // 'ID' => 'md5pwd'
-  'test' => md5('test'),
+  // 'ID' => 'salt|md5pwd'
+  'test' => '|'.md5('test'),
 );
 
 if (save_config($config))

@@ -97,7 +97,21 @@ function check_login($admins)
   $id = post('id');
   $pass = post('pass');
   
-  if (isset($admins[$id]) && md5($pass) === $admins[$id])
+  if (empty($admins[$id]))
+  {
+    return false;
+  }
+  
+  $parts = explode('|', $admins[$id]);
+  if (count($parts) !== 2)
+  {
+    return false;
+  }
+  
+  $salt = $parts[0];
+  $expected = $parts[1];
+  
+  if (md5($salt.$pass) === $expected)
   {
     $_SESSION['admin'] = true;
     $_SESSION['token'] = random_id();
@@ -120,8 +134,9 @@ function add_id(&$users, $id, $pass)
   }
   
   // do not allow empty password
-  $hash = empty($pass) ? null : md5($pass);
-  $users[$id] = $hash;
+  $salt = random_id();
+  $hash = empty($pass) ? null : md5($salt.$pass);
+  $users[$id] = $salt.'|'.$hash;
   return true;
 }
 
