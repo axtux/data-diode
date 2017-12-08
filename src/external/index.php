@@ -58,7 +58,21 @@ function check_auth($users)
   $id = substr($auth, 0, $sep);
   $pass = substr($auth, $sep+1);
   
-  if (empty($users[$id]) || $users[$id] !== md5($pass))
+  if (empty($users[$id]))
+  {
+    return false;
+  }
+  
+  $parts = explode('|', $users[$id]);
+  if (count($parts) !== 2)
+  {
+    return false;
+  }
+  
+  $salt = $parts[0];
+  $expected = $parts[1];
+  
+  if (md5($salt.$pass) !== $expected)
   {
      error('Unauthorized user.');
   }
