@@ -39,7 +39,12 @@ function html_response($title, $body)
       }
     </style>');
   print('</head><body>');
-  print('<h1><a href="">'.htmlspecialchars($title).'</a></h1><hr>');
+  print('<h1><a href="?">'.htmlspecialchars($title).'</a></h1>');
+  if (!empty($_SESSION['admin']))
+  {
+    print('<p><a href="admin.php?logout=1&token='.urlencode($_SESSION['token']).'">Logout</a></p>');
+  }
+  print('<hr>');
   print($body);
   print('<hr><p style="font-size: 80%;">'.htmlspecialchars($title).'</p>');
   print('</body></html>');
@@ -81,6 +86,12 @@ function post($key)
   return null;
 }
 
+function random_id($length=30)
+{
+  $bytes = random_bytes($length);
+  return base64_encode($bytes);
+}
+
 function check_login($admins)
 {
   $id = post('id');
@@ -89,6 +100,7 @@ function check_login($admins)
   if (isset($admins[$id]) && md5($pass) === $admins[$id])
   {
     $_SESSION['admin'] = true;
+    $_SESSION['token'] = random_id();
   }
 }
 
@@ -125,7 +137,7 @@ function del_id(&$users, $id)
 function check_users(&$users)
 {
   $id = post('id');
-  if (empty($id))
+  if (empty($id) || post('token') !== $_SESSION['token'])
   {
     return false;
   }
@@ -153,6 +165,7 @@ function users_table($type, $users)
   $body .= '<td colspan="3"><form method="POST">';
   $body .= '<input type="hidden" name="action" value="add">';
   $body .= '<input type="hidden" name="type" value="'.$type.'">';
+  $body .= '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
   $body .= '<input type="text" name="id" placeholder="New user">';
   $body .= '<input type="password" name="pass" placeholder="New password">';
   $body .= '<input type="submit" value="Create">';
@@ -169,6 +182,7 @@ function users_table($type, $users)
     $body .= '<td><form method="POST">';
     $body .= '<input type="hidden" name="action" value="add">';
     $body .= '<input type="hidden" name="type" value="'.$type.'">';
+    $body .= '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
     $body .= '<input type="hidden" name="id" value="'.htmlspecialchars($id).'">';
     $body .= '<input type="password" name="pass" placeholder="New password">';
     $body .= '<input type="submit" value="Update">';
@@ -177,6 +191,7 @@ function users_table($type, $users)
     $body .= '<td><form method="POST">';
     $body .= '<input type="hidden" name="action" value="del">';
     $body .= '<input type="hidden" name="type" value="'.$type.'">';
+    $body .= '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
     $body .= '<input type="hidden" name="id" value="'.htmlspecialchars($id).'">';
     $body .= '<input type="submit" value="Delete">';
     $body .= '</form></td>';
@@ -193,6 +208,11 @@ if ($config === false)
   error('Bad configuration.');
 }
 session_start();
+if (!empty(get('logout')) && get('token') === $_SESSION['token'])
+{
+  $_SESSION = array();
+}
+
 check_login($config['admins']);
 check_auth();
 
