@@ -17,13 +17,13 @@ function db_connect() {
   $db = $config['database'];
   
   try {
-  	$pdo = new PDO('mysql:host='.$db['host'].';charset=utf8', $db['user'], $db['pass']);
-  	$pdo->query("CREATE DATABASE IF NOT EXISTS ".$db['name']);
-  	$pdo->query("use ".$db['name']);
+    $pdo = new PDO('mysql:host='.$db['host'].';charset=utf8', $db['user'], $db['pass']);
+    $pdo->query("CREATE DATABASE IF NOT EXISTS ".$db['name']);
+    $pdo->query("use ".$db['name']);
 
     //$c = new PDO('mysql:host='.$db['host'].';dbname='.$db['name'].';charset=utf8', $db['user'], $db['pass']);
   } catch(PDOException $e) {
-    	error('Error connecting to database : '.$e->getMessage());
+    error('Error connecting to database : '.$e->getMessage());
   }
   
   // silent errors, check return values and handle error your way
@@ -147,7 +147,7 @@ function create_tables() {
   $sql .=   'user VARCHAR(40) NOT NULL,';
   $sql .=   'INDEX (user),';
   // field data
-  $sql .=   'data VARCHAR(200) NOT NULL';
+  $sql .=   'data LONGTEXT NOT NULL';
   // InnoDB engine
   $sql .= ') CHARACTER SET utf8 ENGINE=INNODB ;';
   // execute
@@ -215,14 +215,30 @@ function set_count($data, $count) {
   return $rows;
 }
 
-function get_datas() {
-  $sql  = 'SELECT * FROM data ORDER BY time DESC';
+function get_data($id) {
+  $sql  = 'SELECT data FROM data WHERE id=?';
+  
+  $params = array(
+    $id,
+  );
+  
+  $r = sql_request($sql, $params);
+  if (empty($r))
+  {
+    return false;
+  }
+  
+  return $r[0]['data'];
+}
+
+function list_datas() {
+  $sql  = 'SELECT time, user, id FROM data ORDER BY time DESC';
   
   return sql_request($sql);
 }
 
-function get_user_datas($user) {
-  $sql  = 'SELECT * FROM data WHERE user=? ORDER BY time DESC';
+function list_user_datas($user) {
+  $sql  = 'SELECT time, user, id FROM data WHERE user=? ORDER BY time DESC';
   
   $params = array(
     $user,
