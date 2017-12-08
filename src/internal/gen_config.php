@@ -13,8 +13,8 @@ $config['internal'] = array(
 
 $config['database'] = array(
   'host' => '127.0.0.1',
-  'user' => 'db_dd',
-  'pass' => 'Passw0rd',
+  'user' => 'root',
+  'pass' => 'toto',
   'name' => 'dd',
 );
 

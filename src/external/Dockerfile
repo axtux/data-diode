@@ -20,6 +20,13 @@ RUN apt-get install -y net-tools
 #Install ping (syntax : ping -c <number of paquets> <ip address>)
 RUN apt-get install -y iputils-ping
 
+#Install Make
+RUN apt-get install -y build-essential
+
+# Install vi
+RUN apt-get install -y vim
+
+
 #===============================================
 #========          Copy FILES         ==========
 #===============================================
@@ -32,6 +39,11 @@ COPY * /
 #Expose the following ports
 EXPOSE 80
  
+#===============================================
+#========      Configure Nginx        ==========
+#===============================================
+
+
 #===============================================
 #========         Launch Scripts      ==========
 #===============================================
