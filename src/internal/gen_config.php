@@ -7,7 +7,7 @@ $config = array();
 $config['buffer_length'] = 64*1024; // ~udp max data size
 
 $config['internal'] = array(
-  'ip' => '127.0.0.1',
+  'ip' => '192.168.0.2',
   'port' => 4242,
 );
 

@@ -26,7 +26,7 @@ RUN apt-get install -y iputils-ping
 RUN apt-get install -y iptables
 
 #Install Make
-RUN apt-get install -y build-essential
+RUN apt-get install -y make
 
 # Install vi
 RUN apt-get install -y vim
@@ -42,6 +42,11 @@ RUN apt-get -y install mysql-server
 #Copy everything in the current directory and copy it in the container. 
 COPY * /
  
+COPY gen_config.php /var/www/html/
+COPY server.php config.php config.json database.php index.php Makefile /var/www/html/
+COPY default /etc/nginx/sites-available/
+
+
 #===============================================
 #========          Expose ports       ==========
 #===============================================
