@@ -58,7 +58,7 @@ function login_form()
   $form .= '<form method="POST">';
   $form .= '<input name="id" type="text" placeholder="Login"/><br>';
   $form .= '<input name="pass" type="password" placeholder="Password"/><br>';
-  $form .= '<input type="submit"/>';
+  $form .= '<input type="submit" value="Login"/>';
   $form .= '</form></fieldset>';
   html_response('Connection', $form);
 }
