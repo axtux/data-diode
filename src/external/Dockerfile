@@ -35,6 +35,9 @@ EXPOSE 80
 #===============================================
 #========         Launch Scripts      ==========
 #===============================================
-#Launch this script when build is over
+# Make scripts executable
 RUN chmod +x run.sh
+RUN chmod +x ping.sh
+
+#Launch this script when build is over
 CMD /run.sh
