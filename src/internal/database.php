@@ -17,15 +17,19 @@ function db_connect() {
   $db = $config['database'];
   
   try {
-    $c = new PDO('mysql:host='.$db['host'].';dbname='.$db['name'].';charset=utf8', $db['user'], $db['pass']);
+  	$pdo = new PDO('mysql:host='.$db['host'].';charset=utf8', $db['user'], $db['pass']);
+  	$pdo->query("CREATE DATABASE IF NOT EXISTS ".$db['name']);
+  	$pdo->query("use ".$db['name']);
+
+    //$c = new PDO('mysql:host='.$db['host'].';dbname='.$db['name'].';charset=utf8', $db['user'], $db['pass']);
   } catch(PDOException $e) {
-    error('Error connecting to database : '.$e->getMessage());
+    	error('Error connecting to database : '.$e->getMessage());
   }
   
   // silent errors, check return values and handle error your way
-  $c->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
   
-  return $c;
+  return $pdo;
 }
 /*
  * Log PDO error and return false
