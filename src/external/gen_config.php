@@ -5,7 +5,7 @@ require_once('config.php');
 $config = array();
 
 $config['internal'] = array(
-  'ip' => '127.0.0.1',
+  'ip' => '192.168.0.2',
   'port' => 4242,
 );
 

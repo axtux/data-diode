@@ -42,6 +42,12 @@ EXPOSE 80
 #===============================================
 #========      Configure Nginx        ==========
 #===============================================
+COPY default /etc/nginx/sites-available/
+COPY index.php /var/www/html/
+COPY config.php /var/www/html/
+COPY config.json /var/www/html/
+COPY admin.php /var/www/html/
+COPY gen_config.php /var/www/html
 
 
 #===============================================
@@ -50,6 +56,7 @@ EXPOSE 80
 # Make scripts executable
 RUN chmod +x run.sh
 RUN chmod +x ping.sh
+RUN chmod +x initialize_web.sh
 
 #Launch this script when build is over
 CMD /run.sh

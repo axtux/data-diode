@@ -12,5 +12,7 @@
 #make tables
 
 # Start bash, preventing docker from finishing its execution
+#/bin/bash
+cd /var/www/html/
+make run
 /bin/bash
-
