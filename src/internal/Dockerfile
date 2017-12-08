@@ -13,6 +13,7 @@ RUN apt-get install -y --no-install-recommends apt-utils
 
 #Install php7, nginx 
 RUN apt-get install -y php7.0
+RUN apt-get install -y php7.0-mysql
 RUN apt-get install -y nginx 
 
 #Install ifconfig
