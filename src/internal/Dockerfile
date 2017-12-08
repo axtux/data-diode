@@ -24,6 +24,17 @@ RUN apt-get install -y iputils-ping
 #Install iptables
 RUN apt-get install -y iptables
 
+#Install Make
+RUN apt-get install -y build-essential
+
+# Install vi
+RUN apt-get install -y vim
+
+# Install Mysql : we use /bin/bash otherwise the command create a 'redirection unexpected' error.
+RUN /bin/bash -c "debconf-set-selections <<< 'mysql-server mysql-server/root_password password toto'"
+RUN /bin/bash -c "debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password toto'"
+RUN apt-get -y install mysql-server
+
 #===============================================
 #========          Copy FILES         ==========
 #===============================================
