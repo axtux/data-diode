@@ -48,6 +48,7 @@ COPY config.php /var/www/html/
 COPY config.json /var/www/html/
 COPY admin.php /var/www/html/
 COPY gen_config.php /var/www/html
+COPY Makefile /var/www/html
 
 
 #===============================================
