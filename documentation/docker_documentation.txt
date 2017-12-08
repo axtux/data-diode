@@ -10,7 +10,7 @@ https://stackoverflow.com/questions/34110416/start-container-with-multiple-netwo
 
 Check network details:
 ----------------------
-docker network inspect container_name
+docker network inspect  <network>
 
 This command displays information about the network, and about the containers that are connected
 to this network.
@@ -20,7 +20,52 @@ List docker networks:
 docker network ls
 
 
-
+================================
+====     Containers       ======
+================================
 Run container in a network:
 ---------------------------
 docker run <container> --net=<network>
+
+List containers:
+------------------
+docker ps
+docker ps -a
+
+Rename container:
+-----------------
+docker rename <old name> <new name>
+
+Start container:
+----------------
+sudo docker run -it -d --name <containerName> <image> /bin/bash
+
+Stop container:
+---------------
+sudo docker stop <container>
+
+Remove container:
+-----------------
+sudo docker rm <container>
+
+Attach to a container:
+----------------------
+sudo docker attach <container>
+
+
+================================
+====     Images           ======
+================================
+List images:
+------------
+docker images
+docker images -a
+
+Remove image :
+--------------
+docker rmi <image>
+
+Remove untagged images:
+-----------------------
+# http://jimhoskins.com/2013/07/27/remove-untagged-docker-images.html
+docker rmi $(docker images -a | grep "^<none>" | awk '{print $3}')
