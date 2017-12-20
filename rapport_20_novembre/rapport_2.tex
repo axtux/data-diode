@@ -147,6 +147,7 @@ In summary, the receiver will contain :
 \item{A UDP server}
 \item{A web server}
 \item{A php server}
+\item{A MYSQL database}
 \end{itemize}
 
 \section{Users}
@@ -157,14 +158,14 @@ Simple users are the data pushers using their connected devices.
 \subsection{Administrators}
 The role of the administrators is to manage the users and other administrators .
 \section{Administration and Management}
-\subsubsection{Administration of Simple Users}
+\subsection{Administration of Simple Users}
 Administrators can create and delete user accounts. If a user lost his password, he needs to contact an administrator who will give him a new one.
 
-\subsubsection{Administration of other Administrators}
+\subsection{Administration of other Administrators}
 Administrators are able to create an administrator account, or to suspend the account of another administrator.
-\subsection{data-diode Installation and Configuration}
+\subsection{Data diode Installation and Configuration}
 \subsubsection{Installation}
-The data-diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password should be modified.
+The data-diode is provided to the client with the programs already installed, and a default administrator account. At first use, the password needs to be modified.
 \subsubsection{Configuration}
 The data-diode settings will be specified in a configuration file that can be modified manually.
 \section{Risk analysis}
@@ -177,7 +178,9 @@ We identified several threat sources:\\
 \item Malicious administrator
 \item Physical access
 \item System failure
+\item Malwares
 \item Zero Day
+\item The UDP protocol
 \end{itemize}
 \subsection{Components}
 The components are the ressources that we are trying to protect inside of our system. We want to prevent an opponent to steal, corrupt or destroy any of the client's assets.
@@ -193,7 +196,7 @@ The components are the ressources that we are trying to protect inside of our sy
 \item The outside administration webpage
 \item The php and web servers
 \item The UDP client and server
-\item The database inside the secure network
+\item The databases
 \end{itemize}
 \subsubsection{Information}
 \begin{itemize}
@@ -201,57 +204,73 @@ The components are the ressources that we are trying to protect inside of our sy
 \item The data pushed through the diode
 \end{itemize}
 \subsection{Risk severity}
-We define here the severity for each components of the CIA triad.
+We define here the severity for each components of the CIA triad. Our numbers are indicators depending on activity of the clients.
 \subsubsection{Confidentiality}
 The confidentiality is the ability to protect the user/administrator credentials and the pushed data from beeing stolen by an opponent.\\
 Here is our severity estimation for the lack of confidentiality:
 \begin{itemize}
-\item More than 1 user credential $->$ Minor
-\item More than 100 user credential $->$ Major
-\item 1 or more administrator credentials $ ->$ Major
-
+\item More than one user credentials $\rightarrow$ Medium
+\item 1 or more administrator credentials $\rightarrow$ Major
 \end{itemize}
 \subsubsection{Integrity}
 The integrity of our system is the ensurance that the data pushed to our diode is not corrupted by the process.\\
 Severity of corrupted packets:
 \begin{itemize}
-\item More than 0.1\% of the packets are corrupted $->$ Minor
-\item More than 1\% of the packets are corrupted $->$ Moderate
-\item More than 5\% of the packets are corrupted $->$ Major
-\item More than 10\% of the packets are corrupted $->$ Extreme
+\item Less than 1 \% of corrupted or lost packets $\rightarrow$ Moderate
+\item More than 1 \% of corrupted or lost packets $\rightarrow$ Major
 \end{itemize}
 \subsubsection{Availability}
 Severity of downtimes:
 \begin{itemize}
-\item More than 10 minutes $->$ Minor
-\item More than 30 minutes $->$ Moderate
-\item More than 1 hour $->$ Major
-\item More than 6 hour $->$ Extreme
+\item Less than 10 minutes $\rightarrow$ Minor
+\item More than 10 minutes $\rightarrow$ Moderate
+\item More than 1 hour $\rightarrow$ Major
+\item More than 6 hour $\rightarrow$ Extreme
 \end{itemize}
 \subsection{Threats Assessments}
 We define here the risks incurred by our system using the CIA triad ( Confidentiality, Integrity and Availability). When several of these components are threatened, we keep the maximum impact as the general impact of the risk.
-\subsubsection{Risk 1: Packet sniffing on the diode }
+\subsubsection{Risk 1: Packet sniffing on the diode (admin) }
 \textbf{Source} \\A malicious person has a physical access to the data diode\\
-\textbf{Component} \\The data diode\\
-\textbf{Description}\\ This person can use packet sniffing techniques on the unsecure sides of the data diode to obtain the credentials of an administrator. \\
+\textbf{Components} \\The data diode and the users database\\
+\textbf{Description}\\ This person uses packet sniffing techniques on the unsecure sides of the data diode to obtain the credentials of an administrator. \\
 \textbf{Impact}\\
-With an administrator access the opponent can modify users and other adminstrators accounts. The confidentiality of the accounts is then corrupted and the availability of our system is also compromised.\\
+With an administrator access the opponent can modify users and other adminstrators accounts. The confidentiality of the accounts is then corrupted.\\
 \begin{center}
 
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
 \hline
-Major & None & Extreme \\
+Major & None & None \\
 \hline
 \end{tabular}\\
 \end{center}
 \textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 2 : Shut down of the data diode }
+\subsubsection{Risk 2: Packet sniffing on the diode (user) }
 \textbf{Source} \\A malicious person has a physical access to the data diode\\
-\textbf{Component} \\The data diode\\
+\textbf{Component} \\The database\\
+\textbf{Description}\\ This person uses packet sniffing techniques on the unsecure sides of the data diode to obtain the credentials of an user. \\
+\textbf{Impact}\\
+With user access the opponent can send data that we cannot be sure of the integrity. These data could corrupt the database informations.\\
+\begin{center}
+
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
+\hline
+Medium & Major & None \\
+\hline
+\end{tabular}\\
+\end{center}
+\textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
+\textbf{Risk level}\\Medium\\
+
+
+\subsubsection{Risk 3 : Shut down of the data diode }
+\textbf{Source} \\A malicious person has a physical access to the data diode\\
+\textbf{Component} \\The inside and outside machines\\
 \textbf{Description}\\ This person can turn off the data diode. \\
 \textbf{Impact}\\
 The shut down of the diode cause a downtime of less than 30 minutes.\\
@@ -260,19 +279,37 @@ The shut down of the diode cause a downtime of less than 30 minutes.\\
 \hline
 \textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
 \hline
-None & None & Minor \\
+None & None & Moderate \\
 \hline
 \end{tabular}\\
 \end{center}
 \textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
 \textbf{Risk level}\\Low\\
 
-\subsubsection{Risk 3 : Deterioration of the data diode }
+\subsubsection{Risk 4 : Optical fiber cut }
 \textbf{Source} \\A malicious person has a physical access to the data diode\\
-\textbf{Component} \\The data diode\\
+\textbf{Component} \\The connection between our two machines\\
+\textbf{Description}\\ This person can cut the optical fiber between our two servers. \\
+\textbf{Impact}\\
+The shut down of the diode cause a downtime of about one hour if the client has the optical fiber piece in stock. The down time can be much larger if the client needs to order the piece.\\
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
+\hline
+None & None & Extreme \\
+\hline
+\end{tabular}\\
+\end{center}
+\textbf{Likelihood}\\ As we recommand our client to protect the access to the diode and to have at least one optical fiber in stock, we assume that this risk is unlikely.\\
+\textbf{Risk level}\\Medium\\
+
+\subsubsection{Risk 5 : Deterioration of the data diode }
+\textbf{Source} \\A malicious person has a physical access to the data diode\\
+\textbf{Component} \\The whole data diode\\
 \textbf{Description}\\ This person can damage or even destroy the data diode.  \\
 \textbf{Impact}\\
-Physical damage or complete destruction of the diode will obviously lead to a device replacement creating a several hour downtime.\\
+Physical damage or complete destruction of the diode will obviously lead to a device replacement creating a several hours or days downtime.\\
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -285,7 +322,7 @@ None & None & Extreme \\
 \textbf{Likelihood}\\ As we recommand our client to protect the access to the diode, we assume that this risk is unlikely.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 4 : Flooding of the sender }
+\subsubsection{Risk 6 : Flooding of the sender }
 \textbf{Source} \\A malicious user send a lot of files in the goal of overloading the sender\\
 \textbf{Component} \\The sender server\\
 \textbf{Description}\\ The user will overload the system with data pushes. 
@@ -304,10 +341,10 @@ None & None & Moderate \\
 \textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the event is likely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 5 : Flooding of the outside webpage}
-\textbf{Source} \\A malicious person send a lot of connection requests to the unsecure side login webpage . \\
+\subsubsection{Risk 7 : Flooding of the outside webpage}
+\textbf{Source} \\Knowing the IP address of our sender server,a malicious person sends a lot of connection requests to the unsecure side login webpage . \\
 \textbf{Component} \\The outside webpage\\
-\textbf{Description}\\ The outside administration webpage will be overloaded. \\
+\textbf{Description}\\ The outside administration webpage can be overloaded. \\
 \textbf{Impact}\\
 With an sufficient overload of this system, the administration webpage can be unavailable for several tens of minutes.\\
 \begin{center}
@@ -319,15 +356,15 @@ None & None & Moderate \\
 \hline
 \end{tabular}\\
 \end{center}
-\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the event is likely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 6 : Brute force on the outside webpage }
+\subsubsection{Risk 8 : Brute force on the outside webpage }
 \textbf{Source} \\A malicious user tries to obtain administrator rights.\\
 \textbf{Component} \\The outside webpage\\
-\textbf{Description}\\This malicious user can use brute force technique or dictionnary attack to find an administrator account. \\
+\textbf{Description}\\This malicious user can use brute force techniques or dictionnary attacks to find an administrator account. \\
 \textbf{Impact}\\
-This kind of attacks generate a lot of connection attemps. This overload on the webpage can lead to a several minutes downtime. If this attack succeed the user has the ability to modify other user or even administrators accounts. He also can delete all the user accounts so that the system cannot import data anymore.\\
+This kind of attacks generate a lot of connection attemps. This overload on the webpage can lead to a several minutes downtime. If this attack succeed the user has the ability to modify other user or even administrator accounts. He also can delete all the user accounts so that the system cannot import data anymore.\\
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -337,10 +374,10 @@ Major & None & Major \\
 \hline
 \end{tabular}\\
 \end{center}
-\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the event is likely to occur.\\
 \textbf{Risk level}\\High\\
 
-\subsubsection{Risk 7 : SQL injection on the outside webpage }
+\subsubsection{Risk 9 : SQL injection on the outside webpage }
 \textbf{Source} \\A malicious user tries to connect as an administrator without authorization.\\
 \textbf{Component} \\The outside webpage\\
 \textbf{Description}\\This person can use SQL injection in the login page in the goal of being connected as an administrator. \\
@@ -355,13 +392,13 @@ Major & None & Major \\
 \hline
 \end{tabular}\\
 \end{center}
-\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the probability is likely.\\
+\textbf{Likelihood}\\ This kind of attack is really popular and easy to make so the event is likely to occur.\\
 \textbf{Risk level}\\High\\
 
-\subsubsection{Risk 8 : UDP packet loss  }
+\subsubsection{Risk 10 : UDP packet loss }
 \textbf{Source} \\UDP is not a secure protocol \\
 \textbf{Component} \\The UDP connection between our 2 servers\\
-\textbf{Description}\\As UDP is not a secure protocol, some packets can be lost between our two servers. \\
+\textbf{Description}\\As UDP is not a secure protocol, some packets can be lost between our two servers. Without ACK mecanism, the protocol does not allow us to know if we lost a packet. \\
 \textbf{Impact}\\
 The loss of a UDP packet can lead to uncorrect data.\\
 \begin{center}
@@ -369,17 +406,17 @@ The loss of a UDP packet can lead to uncorrect data.\\
 \hline
 \textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
 \hline
-None &Moderate & None \\
+None & Moderate & None \\
 \hline
 \end{tabular}\\
 \end{center}
 \textbf{Likelihood}\\ With a so small optical fiber, this event is unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 9 : UDP corrupted packet}
+\subsubsection{Risk 11 : UDP corrupted packet}
 \textbf{Source} \\UDP is not a secure protocol \\
 \textbf{Component} \\The UDP connection between our 2 servers\\
-\textbf{Description}\\As UDP is not a secure protocol, a UDP packet can be corrupted but we have no way to ask it again. \\
+\textbf{Description}\\As UDP is not a secure protocol, a UDP packet can be corrupted but we have no way to ask it again because there is no ACK mecanism in UDP. \\
 \textbf{Impact}\\
 The corruption of a UDP packet can lead to uncorrect data.\\
 \begin{center}
@@ -394,9 +431,9 @@ None & Moderate & None \\
 \textbf{Likelihood}\\ With a so small optical fiber, this event is unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 10 : Deletion of user accounts }
+\subsubsection{Risk 12 : Deletion of user accounts }
 \textbf{Source} \\A malicious administrator wants to block the import of data.\\
-\textbf{Component} \\The outside managment webpage\\
+\textbf{Component} \\The outside management webpage\\
 \textbf{Description}\\This administrator can delete all the user accounts \\
 \textbf{Impact}\\
 Without any authorized user, the system cannot import data anymore. This can create a several hours downtime. \\
@@ -412,27 +449,27 @@ None & None & Extreme \\
 \textbf{Likelihood}\\ Having a malicious administrator is unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 11 : Deletion of administrator accounts }
+\subsubsection{Risk 13 : Deletion of administrator accounts }
 \textbf{Source} \\A malicious administrator wants to block user management.\\
-\textbf{Component} \\The outside managment webpage\\
+\textbf{Component} \\The outside management webpage\\
 \textbf{Description}\\This administrator can delete all the other administrator accounts \\
 \textbf{Impact}\\
-Without any other administrator, we cannot management the users anymore.\\
+Without any other administrator, we cannot manage the users anymore.\\
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
 \hline
-Major & None & None \\
+Major & None & Extreme \\
 \hline
 \end{tabular}\\
 \end{center}
 \textbf{Likelihood}\\ Having a malicious administrator is unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 12 : CSRF in the outside webpage}
+\subsubsection{Risk 14 : CSRF in the outside webpage}
 \textbf{Source} \\A malicious user wants to modify the users or administrators accounts.\\
-\textbf{Component} \\The outside managment webpage\\
+\textbf{Component} \\The outside management webpage\\
 \textbf{Description}\\This malicious user forges a request so that an administrator session is used to modify accounts.   \\
 \textbf{Impact}\\
 With this technique, the user can create an administrator account for himself or modify other accounts. He can then block the import of the data to the secure network. \\
@@ -448,18 +485,18 @@ None & None & Major \\
 \textbf{Likelihood}\\The opponent needs the unawareness of an administrator to lauch this attack. This event is then unlikely to occur.\\
 \textbf{Risk level}\\Medium\\
 
-\subsubsection{Risk 13 : Malware inside the secure side}
+\subsubsection{Risk 15 : Malware inside the secure side}
 \textbf{Source} \\The secure network is infected by a malware.\\
-\textbf{Component} \\The inside machine.\\
-\textbf{Description}\\This malware could flood the inside machine with http requests.   \\
+\textbf{Components} \\The inside machine and the database.\\
+\textbf{Description}\\This malware could flood the inside machine with http requests or encrypt the database.  \\
 \textbf{Impact}\\
-The flood of http request to the inside machine can create a several tens of minutes downtime.\\
+The flood of http request to the inside machine can create a several tens of minutes downtime and the encryption on the database can lead to a several hours downtime with a lack of integrity.\\
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Confidentiality} & \textbf{Integrity} & \textbf{Availability} \\
 \hline
-None & None & Major \\
+None & Major & Extreme \\
 \hline
 \end{tabular}\\
 \end{center}
@@ -473,62 +510,72 @@ None & None & Major \\
 \subsection{Summary}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-Treat & Source & Impact& Likelihood & Evaluation \\
+Threat & Source & Impact& Likelihood & Evaluation \\
 \hline
-1 &  Packet sniffing & Extreme  & Unlikely & Medium\\
+1 &  Packet sniffing (admin) & Major  & Unlikely & Medium\\
 \hline
-2 & Shut down of diode & Minor & Unlikely & Low \\
+2 &  Packet sniffing (user)  & Major  & Unlikely & Medium\\
 \hline
-3 & Deterioration of the diode & Extreme & Unlikely & Medium\\
+3 & Shut down of diode & Moderate & Unlikely & Low \\
 \hline
-4 & Flooding the sender & Moderate & Likely & Medium\\
+4 &  Optical fiber cut & Extreme  & Unlikely & Medium\\
 \hline
-5 & Flooding on outside webpage & Moderate & Likely & Medium \\
+5 & Deterioration of the diode & Extreme & Unlikely & Medium\\
+\hline
+6 & Flooding the sender & Moderate & Likely & Medium\\
+\hline
+7 & Flooding on outside webpage & Moderate & Likely & Medium \\
 \hline 
-6 &  Brute Force on outside webpage & Major & Likely & High\\
+8 &  Brute Force on outside webpage & Major & Likely & High\\
 \hline
-7 & SQL injection on outside webpage & Major & Likely & High \\
+9 & SQL injection on outside webpage & Major & Likely & High \\
 \hline
-8 & UDP packet loss & Moderate & Unlikely & Medium \\
+10 & UDP packet loss & Moderate & Unlikely & Medium \\
 \hline
-9 & UDP corrupted packet & Moderate & Unlikely & Medium \\
+11 & UDP corrupted packet & Moderate & Unlikely & Medium \\
 \hline
-10 & Deletion of user accounts & Extreme & Unlikely & Medium \\
+12 & Deletion of user accounts & Extreme & Unlikely & Medium \\
 \hline
-11 & Deletion of administrator accounts & Major & Unlikely & Medium \\
+13 & Deletion of administrator accounts & Extrele & Unlikely & Medium \\
 \hline
-12 & CSRF on the outside webpage & Major & Unlikely & Medium \\
+14 & CSRF on the outside webpage & Major & Unlikely & Medium \\
 \hline
-13 & Malware in the secure network & Major & Unlikely & Medium \\
+15 & Malware in the secure network & Extreme & Unlikely & Medium \\
 \hline
 
   
 \end{tabular}
 \subsection{Countermeasures}
 As security has a significative price for a company, we assume that low risks should be accepted.
-\subsubsection{Risk 1 : Packet sniffing on the diode}
+\subsubsection{Risk 1 : Packet sniffing on the diode (admin) }
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
-\subsubsection{Risk 3 : Deterioration of the diode}
+\subsubsection{Risk 2 : Packet sniffing on the diode (user) }
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
-\subsubsection{Risk 4 : Flooding on the sender}
-We can mitigate this risk by limiting the amount of data that a user can send in a define time.
-\subsubsection{Risk 5 : Flooding of the outside webpage}
-We can mitigate this risk by temporary blocking the opponent's IP adress when whe detect that the amount of failed connection attemps is too big to just be an administrator mistake.
-\subsubsection{Risk 6 : Brute force on outside webpage}
+\subsubsection{Risk 3 : Shut down of the diode}
+As the physical access to the diode is out of our scope, we transfer this risk to the client.
+\subsubsection{Risk 4 : Optical fiber cut}
+As the physical access to the diode is out of our scope, we transfer this risk to the client.
+\subsubsection{Risk 5 : Deterioration of the data diode}
+As the physical access to the diode is out of our scope, we transfer this risk to the client.
+\subsubsection{Risk 6 : Flooding on the sender}
+We mitigate this risk by limiting the amount of data that a user can send in a define time.
+\subsubsection{Risk 7 : Flooding of the outside webpage}
+We mitigate this risk by temporary blocking the opponent's IP adress when whe detect that the amount of failed connection attemps is too big to just be an administrator mistake.
+\subsubsection{Risk 8 : Brute force on outside webpage}
 We mitigate this risk by forcing administrators to have a long enough password to make it really hard to brute force.
-\subsubsection{Risk 7 : SQL injection on outside webpage}
+\subsubsection{Risk 9 : SQL injection on outside webpage}
 We avoid this risk by using prepared statement mecanism on the login inputs.
-\subsubsection{Risk 8 : UDP packet loss}
+\subsubsection{Risk 10 : UDP packet loss}
 We mitigate this risk by pushing 3 times each UDP packets. We then only need one received packet over the three to obtain the data on the secure side.As the chance to have one lost packet is small, the probabilities to have 3 lost packets are nearly null.
-\subsubsection{Risk 9 : UDP corrupted packet}
+\subsubsection{Risk 11 : UDP corrupted packet}
 We mitigate this risk with the same techniques than for lost packets but including the UDP checksum. We only need one correct packet over the three to obtain the data on the secure side. The chances to have three corrupted packets are also nearly null.
-\subsubsection{Risk 10 : Deletion of user accounts}
+\subsubsection{Risk 12 : Deletion of user accounts}
 As the behaviour and the good will of the employees are under the responsability of the client, we transfer this risk to them.
-\subsubsection{Risk 11 : Deletion of administrator accounts}
+\subsubsection{Risk 13 : Deletion of administrator accounts}
 As the behaviour and the good will of the employees are under the responsability of the client, we transfer this risk to them.
-\subsubsection{Risk 12 : CSRF on outside webpage}
+\subsubsection{Risk 14 : CSRF on outside webpage}
 We mitigate this risk by using tokens in the URL. When an administrator is connected to the administration webpage, a random token is attributed to him and this token will be needed in every request to the website.
-\subsubsection{Risk 13 : Malware inside the secure side}
+\subsubsection{Risk 15 : Malware inside the secure side}
 Since the security inside the secure network is out of our scope, we transfer this risk to the client.
 
 \subsection{Residual risks}
