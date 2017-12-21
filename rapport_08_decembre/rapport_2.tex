@@ -89,7 +89,7 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 
 
 \begin{figure}
-	\includegraphics[scale=0.7]{img/system.png}
+	\includegraphics[scale=0.7]{img/system2.png}
 	\caption{High level architecture of our data diode.}
 \end{figure}
 
@@ -97,6 +97,8 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 \subsection{Applications}
 \subsubsection{JSON API}
 We propose a JSON API to import files comming from connected devices to a secure network. To push data, a device needs to send a HTTP request to the outside machine with the basic authentication of the protocol in the headers and the JSON file in the body. When the request is received, the outside machine parse the HTTP request into a JSON file and send it with UDP to the secure side server. This machine will then store the file.
+\subsubsection{Inside application}
+Our system only stores the files in a database sent through the diode. What will be done with the data is the client business. 
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
