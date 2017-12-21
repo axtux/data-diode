@@ -582,22 +582,39 @@ Since the security inside the secure network is out of our scope, we transfer th
 \subsubsection{Risk 6 : Flooding on the outside webpage}
 If the opponent uses a botnet with enough different IP adresses, he can DDoS attack our system with success.
 
-
 \section{Implementation}
 The data diode is composed of two physical servers, called the \textit{sender} and the \textit{receiver}, each having two Ethernet network interfaces.\\
 
 The first network interface is used to connect to the other server, using a unidirectional fiber optics cable. The second interface is used to connect to the secure network, or the outside network.
 
 \subsection{Sender}
-We can \textit{sender} the server of the data-diode that is facing the outside network. It's mission is to push data to the other server of the data-diode, called the \textit{receiver}.
+The \textit{sender} is the server of the data-diode that is facing the outside network. It's mission is to push data to the server on the other side of the data-diode, called the \textit{receiver}.
+
+\subsubsection{Software}
+The sender runs the following software:
+\begin{itemize}
+	\item{Operating system: Ubuntu server 16.04}
+	\item{HTTP server: Nginx}
+	\item{UDP client: sends the data to the other side of the data-diode}
+\end{itemize}
 
 \subsection{Receiver}
+The \textit{receiver} is the server of the data-diode that is facing the secure network. It listens to UDP messages, and stores them in a database.
 
-The technical details go as follows :
+
+\subsubsection{Software}
+The receiver runs the following software:
 \begin{itemize}
-	\item{\textbf{OS} : Each server runs a 64 bits \textit{ubuntu server} 16.04  distribution}
-	\item{\textbf{Software}: Both servers run an Nginx webserver}
+	\item{HTTP server, used for administration purpose}
+	\item{UDP server: receives the data sent from the sender}
+	\item{Database : the receiver runs a MySql database, used for storing incoming messages}
 \end{itemize}
+
+
+\section{Demo Plan}
+The previous section described how the the system will be eventually implemented. However, for the purpose of this demo, we are presenting a simplified version of the data-diode, where the physical machine has been simulated through software.\\
+
+Instead of a physical data-diode, containing two servers linked by a fiber optic cable, we use docker containers and some IP table manipulation.
 
 \subsection{Docker Containers}
 
@@ -608,6 +625,14 @@ The technical details go as follows :
 \subsubsection{Client-In}
 
 \subsubsection{Client-Out}
+
+\subsection{Data-Diode servers}
+The data-diode is composed of two servers. One facing towards the outside, and one facing towards the inside. We simulate these servers with docker containers, each having to virtual interfaces
+
+\subsection{Unidirectional Fiber optic}
+To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
+
+The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.
 
 \subsection{Networks}
 Each container needs to placed in a network. More precisely, client containers are connected to a single network each, while server containers (diode-in, diode-out) are each connected to two network, as they are both at the edge of two networks.\\
@@ -624,17 +649,5 @@ We modify the IPtables rules to...
 
 \subsubsection{Secure Network}
 
-\section{Demo Plan}
-The previous section described how the the system will be eventually implemented. However, for the purpose of this demo, we are presenting a simplified version of the data-diode, where the physical machine has been simulated through software.\\
-
-Instead of a physical data-diode, containing two servers linked by a fiber optic cable, we use docker containers and some IP table manipulation.
-
-\subsection{Data-Diode servers}
-The data-diode is composed of two servers. One facing towards the outside, and one facing towards the inside. We simulate these servers with docker containers, each having to virtual interfaces
-
-\subsection{Unidirectional Fiber optic}
-To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
-
-The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.
 
 \end{document}
