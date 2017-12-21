@@ -535,8 +535,22 @@ Since the security inside the secure network is out of our scope, we transfer th
 \subsubsection{Risk 6 : Flooding on the outside webpage}
 If the opponent uses a botnet with enough different IP adresses, he can DDoS attack our system with success.
 
-\section{Implementation}
 
+\section{Implementation}
+The data diode is composed of two physical servers, called the \textit{sender} and the \textit{receiver}, each having two Ethernet network interfaces.\\
+
+The first network interface is used to connect to the other server, using a unidirectional fiber optics cable. The second interface is used to connect to the secure network, or the outside network.
+
+\subsection{Sender}
+We can \textit{sender} the server of the data-diode that is facing the outside network. It's mission is to push data to the other server of the data-diode, called the \textit{receiver}.
+
+\subsection{Receiver}
+
+The technical details go as follows :
+\begin{itemize}
+	\item{\textbf{OS} : Each server runs a 64 bits \textit{ubuntu server} 16.04  distribution}
+	\item{\textbf{Software}: Both servers run an Nginx webserver}
+\end{itemize}
 
 \subsection{Docker Containers}
 
