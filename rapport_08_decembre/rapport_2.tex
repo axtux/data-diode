@@ -89,7 +89,7 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 
 
 \begin{figure}
-	\includegraphics[scale=0.7]{img/system2.png}
+	\includegraphics[scale=0.7]{img/system.png}
 	\caption{High level architecture of our data diode.}
 \end{figure}
 
@@ -97,8 +97,6 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 \subsection{Applications}
 \subsubsection{JSON API}
 We propose a JSON API to import files comming from connected devices to a secure network. To push data, a device needs to send a HTTP request to the outside machine with the basic authentication of the protocol in the headers and the JSON file in the body. When the request is received, the outside machine parse the HTTP request into a JSON file and send it with UDP to the secure side server. This machine will then store the file.
-\subsubsection{Inside application}
-Our system only stores the files in a database sent through the diode. What will be done with the data is the client business. 
 
 \subsubsection{Administration and User Management}
 \label{sec:administration}
@@ -616,20 +614,18 @@ The receiver runs the following software:
 \section{Demo Plan}
 The previous section described how the the system will be eventually implemented. However, for the purpose of this demo, we are presenting a simplified version of the data-diode, where the physical machine has been simulated through software.\\
 
-Instead of a physical data-diode, containing two servers linked by a fiber optic cable, we use docker containers and some IP table manipulation.
+Instead of a physical data-diode, containing two servers connected to one another by a fiber optic cable, we use docker containers and some IP table manipulation.
 
 \subsection{Docker Containers}
+A data-diode is composed of two physical servers. In the prototype built for the demo, we use docker containers to simulate each server.
 
-\subsubsection{Diode-In}
-
-\subsubsection{Diode-Out}
-
-\subsubsection{Client-In}
-
-\subsubsection{Client-Out}
 
 \subsection{Data-Diode servers}
-The data-diode is composed of two servers. One facing towards the outside, and one facing towards the inside. We simulate these servers with docker containers, each having to virtual interfaces
+The data-diode is composed of two servers. One facing towards the outside network, and one facing towards the inside network. We simulate these servers with docker containers, each having two virtual network interfaces.
+
+\subsubsection{Docker Sender}
+
+\subsubsection{Docker Receiver}
 
 \subsection{Unidirectional Fiber optic}
 To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
