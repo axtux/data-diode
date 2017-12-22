@@ -186,12 +186,16 @@ Threat sources describes the vectors through which an incident can happen. We id
 \subsection{Components}
 The components are the ressources that we are trying to protect inside of our system. We want to prevent an opponent to steal, corrupt or destroy any of the client's assets.
 \subsubsection{Hardware components}
+There is only one data-diode. However, it is composed of the three following hardware components:
+
 \begin{itemize}
-\item The inside machine
-\item The outside machine
+\item The sender
+\item The receiver
 \item The optical fiber between the two machines
 \end{itemize}
+
 \subsubsection{Software components}
+The software components are all the programs that are necessary to the proper functioning of the data-diode. We identify the following elements:
 \begin{itemize}
 \item The inside administration webpage
 \item The outside administration webpage
@@ -199,7 +203,10 @@ The components are the ressources that we are trying to protect inside of our sy
 \item The UDP client and server
 \item The databases
 \end{itemize}
+
 \subsubsection{Information}
+This section identifies the type of information that needs to be protected. We identify the following information:
+
 \begin{itemize}
 \item The user and administrator credentials
 \item The data pushed through the diode
@@ -211,7 +218,7 @@ The confidentiality is the ability to protect the user/administrator credentials
 Here is our severity estimation for the lack of confidentiality:
 \begin{itemize}
 \item More than one user credentials $\rightarrow$ Medium
-\item 1 or more administrator credentials $\rightarrow$ Major
+\item One or more administrator credentials $\rightarrow$ Major
 \end{itemize}
 \subsubsection{Integrity}
 The integrity of our system is the ensurance that the data pushed to our diode is not corrupted by the process.\\
@@ -229,7 +236,7 @@ Severity of downtimes:
 \item More than 6 hour $\rightarrow$ Extreme
 \end{itemize}
 \subsection{Threats Assessments}
-We define here the risks incurred by our system using the CIA triad ( Confidentiality, Integrity and Availability). When several of these components are threatened, we keep the maximum impact as the general impact of the risk.
+Here we define the risks incurred by our system relative to the CIA triad ( Confidentiality, Integrity and Availability). When several of these components are threatened, we keep the maximum impact as the general impact of the risk.
 \subsubsection{Risk 1: Packet sniffing on the diode (admin) }
 \textbf{Source} \\A malicious person has a physical access to the data diode\\
 \textbf{Components} \\The data diode and the users database\\
