@@ -221,7 +221,8 @@ Here is our severity estimation for the lack of confidentiality:
 \item One or more administrator credentials $\rightarrow$ Major
 \end{itemize}
 \subsubsection{Integrity}
-The integrity of our system is the ensurance that the data pushed to our diode is not corrupted by the process.\\
+The integrity of our system is the insurance that the data pushed to our diode is not corrupted by the process.\\
+
 Severity of corrupted packets:
 \begin{itemize}
 \item Less than 1 \% of corrupted or lost packets $\rightarrow$ Moderate
@@ -669,6 +670,7 @@ Similarly to the \textit{sender}, this container is based on a Ubuntu images. Th
 The configuration file (Dockerfile) of the \textit{receiver} is very similar to the Dockerfile of the \textit{sender} which is why it won't be displayed here. The full Dockerfile for the \textit{sender} and the \textit{receiver} can be found in appendix.
 
 \subsection{Unidirectional Fiber optic}
+\label{sec:unidirectional}
 To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
 
 The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.\\
@@ -699,14 +701,14 @@ In an effort to correctly simulate reality, we define three networks: The outsid
 \subsubsection{Outside Network}
 This network represents the outside, unsafe and insecure network. One of the two network interfaces of the \textit{sender} belong to this network.\\
 
-We can simulate a client initiating a connection to the \textit{sender} by using a binding between a port from the container, and a port from the host machine (in this case, the host machine is a laptop computer).
+We can simulate a client initiating a connection to the \textit{sender} by using a binding between a port from the container, and a port from the host machine (in this case, the host machine is a laptop computer).\\
+
+We can then connect to the public side of the data-diode and access its web interface, through a specific port on the host.
 
 \subsubsection{Intra-Diode Network}
-This network represents the inside of the data diode. It is only populated by two containers, which are the inner part and outer part of the data diode. Between these two servers, communication can only go from the outer part to the inner part.\\
-
-We modify the IPtables rules to...
+This network represents the inside of the data diode. It is only populated by two containers, which are the inner part and outer part of the data diode. Between these two servers, communication can only go from the outer part to the inner part, as mentionned in section \ref{sec:unidirectional}.\\
 
 \subsubsection{Secure Network}
-
+This is the secure part of the system, the secure network. The innermost part of the data-diode is connected to this network. We can access the web interface of the innermost part of the data-diode through a port binding between the container and the host.
 
 \end{document}
