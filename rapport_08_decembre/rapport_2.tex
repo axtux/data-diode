@@ -18,8 +18,13 @@
 
 \author{DANHIER Pierre, LECOCQ Alexis, NYAKI Loïc}
 
+
+
 \begin{document}
 \maketitle
+\vfill
+Professor:  MEES Wim\\
+Teacher Assistant: DEBATTY Thibault
 \newpage
 \tableofcontents
 
@@ -638,8 +643,8 @@ The \textit{receiver} is the server of the data-diode that is facing the secure 
 The receiver runs the following software:
 \begin{itemize}
 	\item{HTTP server, used for administration purpose}
-	\item{UDP server: receives the data sent from the sender, on port \textit{4242}}
-	\item{Database : the receiver runs a MySql database, used for storing incoming messages}
+	\item{UDP server: receives the data sent from the sender, on port \textbf{4242}}
+	\item{Database : the receiver runs a MySql database, used for storing incoming messages. The database is listening on port \textbf{3306}}
 \end{itemize}
 
 \subsection{Countermeasures}
@@ -831,8 +836,8 @@ In our simulation, we connect to the webserver of the receiver through port \tex
 \section{Conclusion}
 The goal of this project was to make us demonstrate our ability to understand and formalize a problem leading to the creation of a fitting solution to that problem.\\
 
-This was done in three steps. First, we showed that we understood the problem, through the creation of a document called \textit{COncept of OPerationS} (CONOPS). We then identified the risks inherent to the system, and show how these risks could be managed, in a section called \textit{Risk Analysis}. Lastly, we specified a solution for a real implementation of the system  and presented a live demonstration of a prototype that embodied the result of the two previous steps.\\
+This was done in three steps. First, we showed that we understood the problem, through the creation of a document called \textit{Concept of OperationS} (CONOPS). We then identified the risks inherent to the system, and show how these risks could be managed, in a section called \textit{Risk Analysis}. Lastly, we specified a solution for a real implementation of the system  and presented a live demonstration of a prototype that embodied the result of the two previous steps.\\
 
-The result was a functioning prototype of a data-diode that successfully implemented the goals of this project, as well as the risk countermeasures that were specified in the document.
+The result was a functioning simulation of a data-diode that successfully implemented the goals of this project, as well as the risk countermeasures that were specified in the document.
 
 \end{document}
