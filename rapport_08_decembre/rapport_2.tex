@@ -185,7 +185,7 @@ In this section, we assess risk and describe how to manage it. This implies iden
 \subsection{Threat sources}
 Threat sources describes the vectors through which an incident can happen. We identify the following threat sources:\\
 \begin{itemize}
-\item Malicious user: a regular employee that would voluntarily use the system in a way such as to create problems 
+\item Malicious user: a user that would voluntarily use the system in a way such as to create problems 
 \item Administrator mistake: an administrator that would make a mistake, such as launching the wrong command, or clicking on the wrong button
 \item Malicious administrator: an administrator who would sabotage the system on purpose
 \item Physical access: a person gaining physical access to the data-diode
@@ -613,6 +613,7 @@ Since the security inside the secure network is out of our scope, we transfer th
 If the opponent uses a botnet with enough different IP adresses, he can DDoS attack our system with success.
 
 \section{Implementation}
+\label{sec:implementation}
 The data diode is composed of two physical servers, called the \textit{sender} and the \textit{receiver}, each having two Ethernet network interfaces.\\
 
 The first network interface is used to connect to the other server, using a unidirectional fiber optics cable. The second interface is used to connect to the secure network, or the outside network.
@@ -826,5 +827,12 @@ This is the secure part of the system, the secure network. The innermost part of
 The network itself has the subnet \textbf{10.0.0.0/24}.
 
 In our simulation, we connect to the webserver of the receiver through port \textbf{8880} of the host machine, thanks to a port binding between the receiver and the host..
+
+\section{Conclusion}
+The goal of this project was to make us demonstrate our ability to understand and formalize a problem leading to the creation of a fitting solution to that problem.\\
+
+This was done in three steps. First, we showed that we understood the problem, through the creation of a document called \textit{COncept of OPerationS} (CONOPS). We then identified the risks inherent to the system, and show how these risks could be managed, in a section called \textit{Risk Analysis}. Lastly, we specified a solution for a real implementation of the system  and presented a live demonstration of a prototype that embodied the result of the two previous steps.\\
+
+The result was a functioning prototype of a data-diode that successfully implemented the goals of this project, as well as the risk countermeasures that were specified in the document.
 
 \end{document}
