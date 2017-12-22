@@ -621,9 +621,28 @@ A data-diode is composed of two physical servers. In the prototype built for the
 
 
 \subsection{Data-Diode servers}
-The data-diode is composed of two servers. One facing towards the outside network, and one facing towards the inside network. We simulate these servers with docker containers, each having two virtual network interfaces.
+The data-diode is composed of two servers. One facing towards the outside network, and one facing towards the inside network. We simulate these servers with docker containers, each having two virtual network interfaces.\\
+
+Docker is a container technology that allows the execution of programs in an isolated environment. In our case, we use two containers that will represent the sender and the receiver.
 
 \subsubsection{Docker Sender}
+The sender container is responsible for pushing data from the outside of the data-diode into the inside.\\
+
+The container was based on a Ubuntu image. Moreover, in order to create a container with the appropriate capabilities, we had to install the following packages:
+
+\begin{itemize}
+	\item{PHP 7.0: This was required to run our backend, which was implemented in PHP}
+	\item{Net-tools: This package was required to be able to use the ifconfig command, and make sure that the network interface where properly initialized}
+	\item{iputils-ping: This package installed the ping command}
+	\item{build-essential: This package installs the Make automation tool}
+\end{itemize}
+
+All these elements must be specified in a special configuration file called \textit{Dockerfile}. An excerpt of the file is displayed below :\\
+
+\begin{table}
+\lstinputlisting[firstline=1, lastline=28]{code/sender-Dockerfile}
+\caption{An excerpt of the configuration file (Dockerfile) of the \textit{sender} container.}
+\end{table}
 
 \subsubsection{Docker Receiver}
 
