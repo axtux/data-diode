@@ -625,19 +625,19 @@ The \textit{sender} is the server of the data-diode that is facing the outside n
 The sender runs the following software:
 \begin{itemize}
 	\item{Operating system: Ubuntu server 16.04}
-	\item{HTTP server: Nginx}
+	\item{HTTP server: Nginx, listening on port \textit{80}}
 	\item{UDP client: sends the data to the other side of the data-diode}
 \end{itemize}
 
 \subsubsection{Receiver}
-The \textit{receiver} is the server of the data-diode that is facing the secure network. It listens to UDP messages, and stores them in a database.
+The \textit{receiver} is the server of the data-diode that is facing the secure network. It listens to UDP messages, and stores them in a database. It's default IP address is \textbf{192.168.1.1}.
 
 
 \paragraph{Software}
 The receiver runs the following software:
 \begin{itemize}
 	\item{HTTP server, used for administration purpose}
-	\item{UDP server: receives the data sent from the sender}
+	\item{UDP server: receives the data sent from the sender, on port \textit{4242}}
 	\item{Database : the receiver runs a MySql database, used for storing incoming messages}
 \end{itemize}
 
@@ -811,7 +811,7 @@ In an effort to correctly simulate reality, we define three networks: The outsid
 This network represents the outside, unsafe and insecure network. The subnet address range is \textbf{200.0.0.0/16}, and one of the two network interfaces of the \textit{sender} is connected to this network, with IP \textbf{200.0.0.2}.\\
 
 
-We simulate a client initiating a connection to the \textit{sender}, from the outside network, by using a binding between port 80 from the sender container, and port 8881 from the host machine (in this case, the host machine is the laptop computer running docker).\\
+We simulate a client initiating a connection to the \textit{sender}, from the outside network, by using a binding between port \textbf{80} from the sender container, and port \textbf{8881} from the host machine (in this case, the host machine is the laptop computer running docker).\\
 
 We can then connect to the public side of the data-diode and access its web interface, through port \textbf{8881} on the host machine.
 
