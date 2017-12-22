@@ -616,10 +616,6 @@ The previous section described how the the system will be eventually implemented
 
 Instead of a physical data-diode, containing two servers connected to one another by a fiber optic cable, we use docker containers and some IP table manipulation.
 
-\subsection{Docker Containers}
-A data-diode is composed of two physical servers. In the prototype built for the demo, we use docker containers to simulate each server.
-
-
 \subsection{Data-Diode servers}
 The data-diode is composed of two servers. One facing towards the outside network, and one facing towards the inside network. We simulate these servers with docker containers, each having two virtual network interfaces.\\
 
@@ -628,13 +624,15 @@ Docker is a container technology that allows the execution of programs in an iso
 \subsubsection{Docker Sender}
 The sender container is responsible for pushing data from the outside of the data-diode into the inside.\\
 
-The container was based on a Ubuntu image. Moreover, in order to create a container with the appropriate capabilities, we had to install the following packages:
+The container was based on a Ubuntu image. However, as the docker Ubuntu image only contains the most important functionalities, many functionalities that are usually present on any Linux distributions are absent. Therefore, in order to create a container with the appropriate capabilities, the following packages needed to be installed:
 
 \begin{itemize}
+	\item{Nginx: The HTML server}
 	\item{PHP 7.0: This was required to run our backend, which was implemented in PHP}
 	\item{Net-tools: This package was required to be able to use the ifconfig command, and make sure that the network interface where properly initialized}
 	\item{iputils-ping: This package installed the ping command}
-	\item{build-essential: This package installs the Make automation tool}
+	\item{makel: This package installs the Make automation tool}
+	\item{vim: a text editor}
 \end{itemize}
 
 All these elements must be specified in a special configuration file called \textit{Dockerfile}. An excerpt of the file is displayed below :\\
@@ -645,6 +643,22 @@ All these elements must be specified in a special configuration file called \tex
 \end{table}
 
 \subsubsection{Docker Receiver}
+The receiver container catches the messages sent by the \textit{sender}, and places them in a MySql database.\\
+
+Similarly to the \textit{sender}, this container is based on a Ubuntu images. The following packages were also installed:
+
+\begin{itemize}
+	\item{Mysql-Server: A Mysql database}
+	\item{Nginx: The HTML server}
+	\item{PHP 7.0: This was required to run our backend, which was implemented in PHP}
+	\item{PHP 7.0-mysql: PHP package required to interact with mysql}
+	\item{Net-tools: This package was required to be able to use the ifconfig command, and make sure that the network interface where properly initialized}
+	\item{iputils-ping: This package installed the ping command}
+	\item{make: This package installs the Make automation tool}
+	\item{vim: a text editor}
+\end{itemize}
+
+The configuration file (Dockerfile) of the \textit{receiver} is very similar to the Dockerfile of the \textit{sender} which is why it won't be displayed here. The full Dockerfile for the \textit{sender} and the \textit{receiver} can be found in appendix.
 
 \subsection{Unidirectional Fiber optic}
 To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
