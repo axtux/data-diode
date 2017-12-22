@@ -89,6 +89,9 @@ However UDP comes with its own limitations, as it doesn't ensure the order at wh
 
 
 \begin{figure}
+%	\centering
+%	\def\svgwidth{\columnwidth}
+%	\input{img/system2.pdf_tex}
 	\includegraphics[scale=0.7]{img/system2.png}
 	\caption{High level architecture of our data diode.}
 \end{figure}
@@ -637,7 +640,6 @@ In section \ref{sec:countermeasures}, we described our choice of countermeasures
 We want to prevent a malicious user from sending an abnormal amount of data in an attempt to saturate the filesystem.\\
 
 To mitigate this risk, we impose a limit on the amount of data that a user can send.
-\subsubsection{UDP packet loss (Risk 10)}
 
 
 \subsubsection{Brute force attack on the outside web page (Risk 8)}
@@ -666,17 +668,62 @@ function insert_data($data) {
 }
 \end{lstlisting}
 
+
 \subsubsection{UDP packet loss (Risk 10)}
+\label{sec:udp}
+To mitigate the risk of packet loss, we send each packet several times. The number of times can be adjusted to the needs. In this case, we send each packet three times.
+
+\begin{lstlisting}[caption={(sender/index.php) Each UDP packet is sent 3 times},captionpos=b]
+  $repetition = 3
+  $sock = udp_socket();
+  for ($i = 0; $i < $repetition; $i++)
+  {
+    $r = socket_sendto($sock, $json, $len, null,
+         $internal['ip'], $internal['port']);
+    if ($r !== $len)
+    {
+      error('Error processing data (2).');
+    }
+  }
+\end{lstlisting}
 
 \subsubsection{UDP corrupted packets (Risk 11)}
+The solution to packet corruption is the same as in section \ref{sec:udp}.
 
 \subsubsection{CSRF attack on outside webpage (Risk 14)}
+\textit{Cross-Site Request Forgery} (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they're currently authenticated. This can compromise the entire application.\\
+
+To mitigate this risk, we make use of CSRF token that is uniquely generated for each request.
 
 
 \section{Demo Plan}
 The previous section described how the the system will be eventually implemented. However, for the purpose of this demo, we are presenting a simplified version of the data-diode, where the physical machine has been simulated through software.\\
 
 Instead of a physical data-diode, containing two servers connected to one another by a fiber optic cable, we use docker containers and some IP table manipulation.
+
+\begin{lstlisting}[frame=single,caption={(start\_containers.sh) Creation of the containers, assignment of their IP addresses,setup of port bindings and connection to the networks.},captionpos=b] 
+# Building container : inner side of the diode
+cd internal/
+docker build . -t diode_in-img
+
+docker run -t -d --net secure-network --ip 10.0.0.2 -p 8880:80 
+        --name diode-in 
+        --cap-add=NET_ADMIN --cap-add=NET_RAW diode_in-img
+cd -
+
+# Building container : outter side of the diode
+cd external/
+docker build . -t diode_out-img 
+docker run -t -d --net intra-diode --ip 192.168.0.3 
+    -p 8881:80 -p 8882:443 
+    --name diode-out diode_out-img
+cd -
+
+# Creating connecting a part of the diode to the outside, 
+# and the other one to the inside
+docker network connect --ip 192.168.0.2  intra-diode diode-in
+docker network connect --ip 200.0.0.2 external-network diode-out
+\end{lstlisting}
 
 \subsection{Data-Diode servers}
 The data-diode is composed of two servers. One facing towards the outside network, and one facing towards the inside network. We simulate these servers with docker containers, each having two virtual network interfaces.\\
@@ -729,22 +776,23 @@ To simulate the fiber optic cable that has been cut, we use a script that modifi
 The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.\\
 
 This script only contains the following command:\\
-%\begin{table}
-%\lstinputlisting[firstline=1, lastline=28]{code/fiber_optic_cut.sh}
-%\caption{fiber\_optic\_cut.sh : This command virtually cuts the connection %between the \textit{receiver} and the \textit{sender}, by dropping all paquets %going to the receiver.}
-%\end{table}
 
-\begin{lstlisting}[frame=single] 
+\begin{lstlisting}[frame=single,caption={(fiber\_optic\_cut.sh) All paquets going to the intra-diode network are dropped.},captionpos=b] 
 iptables -A OUTPUT -d 192.168.0.0/24 -j DROP
 \end{lstlisting}
 
 which virtually cuts the connection between the \textit{receiver} and the \textit{sender}, by dropping all paquets going to the \textit{sender}.
 
+\begin{figure}
+	\includegraphics[scale=0.7]{img/reseau.png}
+	\caption{High level architecture of our data diode.}
+\end{figure}
 
 \subsection{Networks}
 Each container needs to placed in a network. More precisely, client containers are connected to a single network each, while server containers (diode-in, diode-out) are each connected to two network, as they are both at the edge of two networks.\\
 
 In an effort to correctly simulate reality, we define three networks: The outside network, the intra-diode network, and the secure network.
+
 
 \begin{table}
 \lstinputlisting[firstline=1, lastline=28]{code/create_networks.sh}
@@ -752,16 +800,23 @@ In an effort to correctly simulate reality, we define three networks: The outsid
 \end{table}
 
 \subsubsection{Outside Network}
-This network represents the outside, unsafe and insecure network. One of the two network interfaces of the \textit{sender} belong to this network.\\
+This network represents the outside, unsafe and insecure network. The subnet address range is \textbf{200.0.0.0/16}, and one of the two network interfaces of the \textit{sender} is connected to this network, with IP \textbf{200.0.0.2}.\\
 
-We can simulate a client initiating a connection to the \textit{sender} by using a binding between a port from the container, and a port from the host machine (in this case, the host machine is a laptop computer).\\
 
-We can then connect to the public side of the data-diode and access its web interface, through a specific port on the host.
+We simulate a client initiating a connection to the \textit{sender}, from the outside network, by using a binding between port 80 from the sender container, and port 8881 from the host machine (in this case, the host machine is the laptop computer running docker).\\
+
+We can then connect to the public side of the data-diode and access its web interface, through port \textbf{8881} on the host machine.
 
 \subsubsection{Intra-Diode Network}
-This network represents the inside of the data diode. It is only populated by two containers, which are the inner part and outer part of the data diode. Between these two servers, communication can only go from the outer part to the inner part, as mentionned in section \ref{sec:unidirectional}.\\
+This network represents the inside of the data diode. It is only populated by two containers, which are the inner part and outer part of the data diode. Between these two servers, communication can only go from the outer part to the inner part, as mentioned in section \ref{sec:unidirectional}.\\
+
+This network has a subnet of \textbf{192.168.0.0/24} and the sender and receiver are connected to that network with, respectively IP \textbf{192.168.0.3} and IP \textbf{192.168.0.2}.
 
 \subsubsection{Secure Network}
-This is the secure part of the system, the secure network. The innermost part of the data-diode is connected to this network. We can access the web interface of the innermost part of the data-diode through a port binding between the container and the host.
+This is the secure part of the system, the secure network. The innermost part of the data-diode is connected to this network, with the IP \textbf{10.0.0.2}. The receiver runs a web server on port \textbf{80}. It can be accessed from the secure network.\\
+
+The network itself has the subnet \textbf{10.0.0.0/24}.
+
+In our simulation, we connect to the webserver of the receiver through port \textbf{8880} of the host machine, thanks to a port binding between the receiver and the host..
 
 \end{document}
