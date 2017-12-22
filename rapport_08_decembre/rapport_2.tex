@@ -169,18 +169,19 @@ The data-diode is provided to the client with the programs already installed, an
 \subsubsection{Configuration}
 The data-diode settings will be specified in a configuration file that can be modified manually.
 \section{Risk analysis}
+In this section, we assess risk and describe how to manage it. This implies identifying threat sources, the components (or resources) as well as the potential impact that an attack on a component would have.
 
 \subsection{Threat sources}
-We identified several threat sources:\\
+Threat sources describes the vectors through which an incident can happen. We identify the following threat sources:\\
 \begin{itemize}
-\item Malicious user 
-\item Administrator mistake
-\item Malicious administrator
-\item Physical access
-\item System failure
-\item Malwares
-\item Zero Day
-\item The UDP protocol
+\item Malicious user: a regular employee that would voluntarily use the system in a way such as to create problems 
+\item Administrator mistake: an administrator that would make a mistake, such as launching the wrong command, or clicking on the wrong button
+\item Malicious administrator: an administrator who would sabotage the system on purpose
+\item Physical access: a person gaining physical access to the data-diode
+\item System failure: a crash of the system
+\item Malwares: various malware present on either the secure network, or public network
+\item Zero Day Exploit: the exploitation of an unknown security flaw
+\item The UDP protocol: this protocol doesn't ensure that packets arrive in the correct order, or that they arrive at all
 \end{itemize}
 \subsection{Components}
 The components are the ressources that we are trying to protect inside of our system. We want to prevent an opponent to steal, corrupt or destroy any of the client's assets.
