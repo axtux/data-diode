@@ -663,15 +663,35 @@ The configuration file (Dockerfile) of the \textit{receiver} is very similar to 
 \subsection{Unidirectional Fiber optic}
 To simulate the fiber optic cable that has been cut, we use a script that modifies the IP table of the internal server.\\
 
-The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.
+The script, called \textit{fiber\_optic\_cut.sh}, drops all the paquets originating from the secure network that are trying to reach the \textit{intra-diode} network.\\
+
+This script only contains the following command:\\
+%\begin{table}
+%\lstinputlisting[firstline=1, lastline=28]{code/fiber_optic_cut.sh}
+%\caption{fiber\_optic\_cut.sh : This command virtually cuts the connection %between the \textit{receiver} and the \textit{sender}, by dropping all paquets %going to the receiver.}
+%\end{table}
+
+\begin{lstlisting}[frame=single] 
+iptables -A OUTPUT -d 192.168.0.0/24 -j DROP
+\end{lstlisting}
+
+which virtually cuts the connection between the \textit{receiver} and the \textit{sender}, by dropping all paquets going to the \textit{sender}.
+
 
 \subsection{Networks}
 Each container needs to placed in a network. More precisely, client containers are connected to a single network each, while server containers (diode-in, diode-out) are each connected to two network, as they are both at the edge of two networks.\\
 
-In an effort to correctly simulate reality, we define three networks.
+In an effort to correctly simulate reality, we define three networks: The outside network, the intra-diode network, and the secure network.
+
+\begin{table}
+\lstinputlisting[firstline=1, lastline=28]{code/create_networks.sh}
+\caption{(\textit{create\_networks.sh}) the scripts that creates the three docker networks.}
+\end{table}
 
 \subsubsection{Outside Network}
-This network is the outside network. It represents the outside, unsafe and insecure network. It contains one container that will act as a client as well as the Outside part of the data-diode, to which the client container will connect.
+This network represents the outside, unsafe and insecure network. One of the two network interfaces of the \textit{sender} belong to this network.\\
+
+We can simulate a client initiating a connection to the \textit{sender} by using a binding between a port from the container, and a port from the host machine (in this case, the host machine is a laptop computer).
 
 \subsubsection{Intra-Diode Network}
 This network represents the inside of the data diode. It is only populated by two containers, which are the inner part and outer part of the data diode. Between these two servers, communication can only go from the outer part to the inner part.\\
