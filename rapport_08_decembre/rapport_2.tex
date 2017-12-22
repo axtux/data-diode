@@ -567,7 +567,7 @@ As the physical access to the diode is out of our scope, we transfer this risk t
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
 \subsubsection{Risk 5 : Deterioration of the data diode}
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
-\subsubsection{Risk 6 : Flooding on the sender}
+\subsubsection{Risk 6 : Denial of service attack through data flooding}
 We mitigate this risk by limiting the amount of data that a user can send in a define time.
 \subsubsection{Risk 7 : Flooding of the outside webpage}
 We mitigate this risk by temporary blocking the opponent's IP adress when whe detect that the amount of failed connection attemps is too big to just be an administrator mistake.
@@ -631,12 +631,40 @@ The receiver runs the following software:
 \end{itemize}
 
 \subsection{Countermeasures}
-In section \ref{sec:countermeasures}, we described our choice of countermeasures to address risks. This section describes how these countermeasures were implemented.
+In section \ref{sec:countermeasures}, we described our choice of countermeasures to address risks. This section illustrates how these countermeasures were implemented.
+
+\subsubsection{Denial of service attack through data flooding (Risk 6)}
+We want to prevent a malicious user from sending an abnormal amount of data in an attempt to saturate the filesystem.\\
+
+To mitigate this risk, we impose a limit on the amount of data that a user can send.
+\subsubsection{UDP packet loss (Risk 10)}
+
 
 \subsubsection{Brute force attack on the outside web page (Risk 8)}
 Only registered users can send data inside the secure network. However, an attacker could try to obtain a user password through a brute force attack. To mitigate this risk, users are required to use long passwords.
 
 \subsubsection{SQL injection ou outside webpage (Risk9)}
+Inserting data into a database is always a dangerous affair, due to the risk of SQL injection, where an attaquer will try to hide SQL code in the data he sends to the database.\\
+
+A solid way to prevent this is the use of prepared statements. What follows is an example of how we use them:
+
+\begin{lstlisting}[frame=single] 
+function insert_data($data) {
+  $sql = 'INSERT INTO data VALUES(?, ?, ?, ?, ?);';
+  
+  $params = array(
+    $data['time'],
+    $data['id'],
+    1,
+    $data['user'],
+    json_encode($data['data']),
+  );
+  
+  sql_request($sql, $params, $rows);
+  
+  return $rows;
+}
+\end{lstlisting}
 
 \subsubsection{UDP packet loss (Risk 10)}
 
