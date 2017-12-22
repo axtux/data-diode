@@ -555,6 +555,7 @@ Threat & Source & Impact& Likelihood & Evaluation \\
   
 \end{tabular}
 \subsection{Countermeasures}
+\label{sec:countermeasures}
 As security has a significative price for a company, we assume that low risks should be accepted.
 \subsubsection{Risk 1 : Packet sniffing on the diode (admin) }
 As the physical access to the diode is out of our scope, we transfer this risk to the client.
@@ -571,7 +572,16 @@ We mitigate this risk by limiting the amount of data that a user can send in a d
 \subsubsection{Risk 7 : Flooding of the outside webpage}
 We mitigate this risk by temporary blocking the opponent's IP adress when whe detect that the amount of failed connection attemps is too big to just be an administrator mistake.
 \subsubsection{Risk 8 : Brute force on outside webpage}
-We mitigate this risk by forcing administrators to have a long enough password to make it really hard to brute force.
+We mitigate this risk by forcing users to have a password that respects some security criteria. The passwords should:
+
+\begin{itemize}
+	\item{Be 8 characters long, or more}
+	\item{Contain at least one uppercase letter}
+	\item{Contain at least one special character}
+\end{itemize}
+
+This restriction on passwords maximizes the size of the search space that will need to be bruteforced.
+
 \subsubsection{Risk 9 : SQL injection on outside webpage}
 We avoid this risk by using prepared statement mecanism on the login inputs.
 \subsubsection{Risk 10 : UDP packet loss}
@@ -596,10 +606,11 @@ The data diode is composed of two physical servers, called the \textit{sender} a
 
 The first network interface is used to connect to the other server, using a unidirectional fiber optics cable. The second interface is used to connect to the secure network, or the outside network.
 
-\subsection{Sender}
+\subsection{Architecture}
+\subsubsection{Sender}
 The \textit{sender} is the server of the data-diode that is facing the outside network. It's mission is to push data to the server on the other side of the data-diode, called the \textit{receiver}.
 
-\subsubsection{Software}
+\paragraph{Software}
 The sender runs the following software:
 \begin{itemize}
 	\item{Operating system: Ubuntu server 16.04}
@@ -607,17 +618,31 @@ The sender runs the following software:
 	\item{UDP client: sends the data to the other side of the data-diode}
 \end{itemize}
 
-\subsection{Receiver}
+\subsubsection{Receiver}
 The \textit{receiver} is the server of the data-diode that is facing the secure network. It listens to UDP messages, and stores them in a database.
 
 
-\subsubsection{Software}
+\paragraph{Software}
 The receiver runs the following software:
 \begin{itemize}
 	\item{HTTP server, used for administration purpose}
 	\item{UDP server: receives the data sent from the sender}
 	\item{Database : the receiver runs a MySql database, used for storing incoming messages}
 \end{itemize}
+
+\subsection{Countermeasures}
+In section \ref{sec:countermeasures}, we described our choice of countermeasures to address risks. This section describes how these countermeasures were implemented.
+
+\subsubsection{Brute force attack on the outside web page (Risk 8)}
+Only registered users can send data inside the secure network. However, an attacker could try to obtain a user password through a brute force attack. To mitigate this risk, users are required to use long passwords.
+
+\subsubsection{SQL injection ou outside webpage (Risk9)}
+
+\subsubsection{UDP packet loss (Risk 10)}
+
+\subsubsection{UDP corrupted packets (Risk 11)}
+
+\subsubsection{CSRF attack on outside webpage (Risk 14)}
 
 
 \section{Demo Plan}
