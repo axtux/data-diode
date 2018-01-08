@@ -8,24 +8,7 @@ ENV DEBIAN-FRONTEND=noninteractive
 
 # Install apt-utils that seems to be required
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends apt-utils
-
-#Install php7, nginx 
-RUN apt-get install -y php7.0
-RUN apt-get install -y nginx 
-
-#Install ifconfig
-RUN apt-get install -y net-tools
-
-#Install ping (syntax : ping -c <number of paquets> <ip address>)
-RUN apt-get install -y iputils-ping
-
-#Install Make
-RUN apt-get install -y build-essential
-
-# Install vi
-RUN apt-get install -y vim
-
+RUN apt-get install -y --no-install-recommends apt-utils php7.0 nginx net-tools iputils-ping make vim
 
 #===============================================
 #========          Copy FILES         ==========
@@ -43,12 +26,7 @@ EXPOSE 80
 #========      Configure Nginx        ==========
 #===============================================
 COPY default /etc/nginx/sites-available/
-COPY index.php /var/www/html/
-COPY config.php /var/www/html/
-COPY config.json /var/www/html/
-COPY admin.php /var/www/html/
-COPY gen_config.php /var/www/html
-
+COPY index.php config.php config.json admin.php gen_config.php /var/www/html
 
 #===============================================
 #========         Launch Scripts      ==========
